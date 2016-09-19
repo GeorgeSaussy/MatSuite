@@ -179,7 +179,7 @@ vector<vector<double> > matInv(vector<vector<double> > A) {
     return toret;
 }
 /**
-    Calculate the Q function for Padre's approximation
+    Calculate the Q function for Pade's approximation
     @param A a square matrix
     @param p degree of polynomial approximation
     @return a square matrix given by (2.1) in Ward 1977
