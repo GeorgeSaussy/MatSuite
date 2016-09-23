@@ -1,0 +1,16 @@
+1. Compute \bar{\lambda}:=( \sum_{i=1}^n a_{ii} ) / n .
+2. Compute B:=A-\lambda I
+3. Call Parlett and Reinsch's subroutine BALANCE returning the transformed B
+    matrix, the diagonal D, and the information about the permutation matrix P
+4. If \norm{B}_1 <= 1 go to step 7
+5. Determine m>0 such that 2^{-m}\norm{B}_1 <= 1;
+6. Compute B=B 2^{-m}
+7. Compute Q_p(B) and Q_p(-B) by (2.1)*
+8. Compute e^B=Q_p^{-1}(-B)Q_p(B) by Gaussian elimination
+9. If steps 5 and 6 were skipped go to step 11.
+10 Square e^B m times, i.e. go to step 11.
+11. Compute e^A=e^\bar{\lambda}P D e^B D^{-1} P^T
+
+*(2.1)
+Q_p(X)=\sum_{k=0}^p c_k X^k
+c_k=\frac{(2p-k)!p!}{(2p)!k!(p-k)!} 
