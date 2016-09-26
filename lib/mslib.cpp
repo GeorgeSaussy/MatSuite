@@ -4,12 +4,6 @@
 using namespace std;
 // TODO test implementation
 // TODO implement BALANCE
-
-/**
-    Prints a matrix to std::out
-    @param A a matrix
-    @return void
-*/
 void matPrint(vector<vector<double> > A) {
     cout<<endl;
     for(int k=0;k<A.size();k++) {
@@ -20,13 +14,6 @@ void matPrint(vector<vector<double> > A) {
     }
     cout<<endl;
 }
-/**
-    Function to add two matricies to one another
-    @param A the first summand
-    @param B the second summand
-    @return the sum A + B
-    @warning demensions of A and B must match
-*/
 vector<vector<double> > matAdd(vector<vector<double> > A, vector<vector<double> > B) {
     vector<vector<double> > toret;
     for(int k=0;k<A.size();k++) {
@@ -38,13 +25,6 @@ vector<vector<double> > matAdd(vector<vector<double> > A, vector<vector<double> 
     }
     return tempRow;
 }
-/**
-    Function to perform matix multiplication
-    @param A first matrix factor
-    @param B seond matrix factor
-    @return the product A*B
-    @warning the width of A must equal the height of B
-*/
 vector<vector<double> > matMult(vector<vector<double> > A, vector<vector<double> > B) {
     vector<vector<double> > toret;
     for(int k=0;k<A.size();k++) {
@@ -60,12 +40,6 @@ vector<vector<double> > matMult(vector<vector<double> > A, vector<vector<double>
     }
     return toret;
 }
-/**
-    Function to perform scalar multiplication on a matrix
-    @param A a sqare matrix
-    @param t a scalar
-    @return the value A*t
-*/
 vector<vector<double> > scalarMult(vector<vector<double> > A, double t) {
     vector<vector<double> > toret;
     for(int k=0;k<A.size();k++) {
@@ -77,11 +51,6 @@ vector<vector<double> > scalarMult(vector<vector<double> > A, double t) {
     }
     return toret;
 }
-/**
-    Function to calculate the one norm of a matrix
-    @param A a square matrix
-    @return the one norm of A
-*/
 double oneNorm(vector<vector<double> > A) {
     double toret=0;
     for(int k=0;k<A.size();k++) {
@@ -93,11 +62,6 @@ double oneNorm(vector<vector<double> > A) {
     }
     return toret;
 }
-/**
-    Function to calculate the traspose of a retangular matrix
-    @param P a matrix
-    @return the transpose of P
-*/
 vector<vector<double> > matT(vector<vector<double> > P) {
     vector<vector<double> > toret;
     for(int k=0;k<P[0].size();k++) {
@@ -109,14 +73,6 @@ vector<vector<double> > matT(vector<vector<double> > P) {
     }
     return toret;
 }
-/**
-    Function to swap the rows of a matrix
-    @param A a matrix
-    @param i the first row index to swap
-    @param j the second row index to swap
-    @return a matrix with rows i and j interchanged
-    @warning must 0 <= i,j < A.size()
-*/
 vector<vector<double> > swapRows(vector<vector<double> >, int i, int j) {
     vector<vector<double> > toret=A;
     for(int k=0;k<A[0].size();k++) {
@@ -125,12 +81,6 @@ vector<vector<double> > swapRows(vector<vector<double> >, int i, int j) {
     }
     return toret;
 }
-/**
-    Function to calculate the inverse of a matrix
-    @param A a square invertable matrix
-    @return the inverse of A
-    @warning A cannot be singular
-*/
 vector<vector<double> > matInv(vector<vector<double> > A) {
     vector<vector<double> > toret;
     vector<vector<double> > ongoing=A;
@@ -178,12 +128,6 @@ vector<vector<double> > matInv(vector<vector<double> > A) {
     }
     return toret;
 }
-/**
-    Calculate the Q function for Pade's approximation
-    @param A a square matrix
-    @param p degree of polynomial approximation
-    @return a square matrix given by (2.1) in Ward 1977
-*/
 vector<vector<double> > Q(vector<vector<double> > A, int p) {
     vector<vector<double> > toret=A;
     vector<vector<double> > ongoing=A;
@@ -207,13 +151,6 @@ vector<vector<double> > Q(vector<vector<double> > A, int p) {
         toret=matAdd(toret,scalarMult(ongoing,c));
     }
 }
-/**
-    First draft function to calculate exp(At), where A is a matrix and t is a
-    scalar, following Ward 1977
-    @param A a square matrix
-    @param t a scalar
-    @return exp(At) as a matix
-*/
 vector<vector<double> > matExp(vector<vector<double> > A) {
     vector<vector<double> > toret;
     // step 1
