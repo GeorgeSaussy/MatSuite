@@ -1,3 +1,4 @@
+#include "mslib.h"
 #include <vector>
 #include <iostream>
 #include <math.h>
@@ -198,4 +199,88 @@ vector<vector<double> > matExp(vector<vector<double> > A) {
     }
     toret=scalarMult(matMult(P,matMult(D,matMult(expB,matMult(matInv(D),matT(P)))),exp(t));
     return toret;
+}
+void exc(double * d[], double * a[], int m, int n, int j) { // check all loop bounds!!!
+    (*d)[m]=j;
+    if(j!=m) {
+        int i=0;
+        double f=0.0;
+        for(;i<k;i++) {
+            f=a[i][j];
+            a[i][j]=a[m][i];
+            a[m][i]=f;
+        }
+        for(i=0;i<n;i++) {
+            f=a[j][i];
+            a[j][i]=a[m][i];
+            a[j][i]=f;
+        }
+    }
+}
+void balance(double * d[], double * a[], int n, int b) { // TODO not sure how this works
+    int i=0, j=0, k=0, l=0;
+    double b2=0.0, c=0.0, f=0.0, g=0.0, r=0.0, s=0.0;
+    bool noconv=false;
+    b2=b*b;
+    l=1;
+    k=n;
+    // L1
+    for(j=k;j>1;j--) {
+        r=0;
+        for(i=1;i<j-1;i++) {
+            r=r+abs(a[j][i]);
+        }
+        for(i=j+1;j<k;j++) {
+            r=r+abs(a[j][i]);
+        }
+        exc(d,a,k,n,j); // from """ begin exc(k); k:=k-1; go to L1 end """
+    }
+    // L2
+    for(j=l;j<k;j++) {
+        c=0;
+        for(i=l;i<j-1;i++) {
+            c+=abs(a[i][j]);
+        }
+        for(i=j+1;i<k;i++) {
+            c+=abs(a[i][j]);
+        }
+        if(c==0) {
+            exc(d,a,l,n,j); // from """ begin exc(l); l:=l+1; go to L2 end """
+        }
+    }
+    low=l;
+    hi=k;
+    for(i=l;i<k;i++) {
+        d[i]=1;
+    }
+    // iteration
+    noconv=false;
+    for(i=l;i<k;i++) {
+        c=0;
+        r=0;
+        for(j=l;j<i-1;j++) {
+            c+=abs(a[j][i]);
+            r+=abs(a[i][j]);
+        }
+        for(j=i+1;j<k;j++) {
+            c+=abs(a[j][i]);
+            r+=abs(a[i][j]);
+        }
+        // L3
+        // What """ if c<g then begin f:=f*b; c:=c*b2; go to L3 end; """ ???
+        g=r*b;
+        // L4
+        // What """ if c>=g then begin f:=f/b; c:=c/b2; go to L4 end; """ ???
+        if((c+r)/f<0.95*s) {
+            g=1/f;
+            d[i]=d[i]*f;
+            noconv=true;
+            for(j=;j<n;j++) {
+                a[i][j]=a[i][j]*g;
+            }
+            for(j=1;j<k;j++) {
+                a[j][i]=a[j][i]*f;
+            }
+        }
+    }
 }

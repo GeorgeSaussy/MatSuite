@@ -76,4 +76,10 @@ vector<vector<double> > Q(vector<vector<double> > A, int p);
     @return exp(At) as a matix
 */
 vector<vector<double> > matExp(vector<vector<double> > A);
+/**
+    Function to perform the BALANCE procedure
+    @param n
+    @param b
+*/
+void balance(int n, int b);
 #endif

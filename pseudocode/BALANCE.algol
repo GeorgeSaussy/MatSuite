@@ -33,7 +33,7 @@ L1:
 L2:
     for j:=l step 1 until k do
     begin
-        c:=-;
+        c:=0;
         for i:=l step 1 until j-1, j+1 step 1 until k do
             c:=c+abs(a[i,j]);
         if c=0 then
