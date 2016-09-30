@@ -89,6 +89,17 @@ SqMat multSqMat(SqMat mat1, SqMat mat2) {
         }
     }
 }
+SqMat powSqMat(SqMat mat, int j) {
+    SqMat toret;
+    if(j>=0) {
+        initIdSqMat(&toret,mat.N);
+        int k=0;
+        for(;k<mat.N;k++) {
+            safeCopySqMat(multSqMat(toret,mat),toret);
+        }
+    }
+    return toret;
+}
 SqMat transSqMat(SqMat mat) {
     SqMat toret;
     initZeroSqMat(&toret,mat.N);

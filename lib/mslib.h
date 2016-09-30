@@ -1,5 +1,6 @@
 #ifndef MSLIB
 #define MSLIB
+// TODO add print matrix
 /**
     Struct to hold a matrix
 */
@@ -69,6 +70,14 @@ SqMat addSqMat(SqMat mat1, SqMat mat2);
 */
 SqMat multSqMat(SqMat mat1, SqMat mat2);
 /**
+    Function to calculate the power of a matrix
+    @param mat the base matrix
+    @param j the power
+    @return mat^j
+    @warning must have j>=0
+*/
+SqMat powSqMat(SqMat mat, int j);
+/**
     Function to calculate the transpose of a square matrix
     @param mat the matrix to transpose
     @return the transpose of mat
@@ -82,4 +91,10 @@ SqMat transSqMat(SqMat mat);
     @return void
 */
 void swapRows(SqMat * mat, int i, int j);
+/** TODO
+    Calculate the inverse of a matrix using Gaussian elemination
+    @param mat the matrix to invert
+    @return the inverse of mat
+*/
+// SqMat invSqMAt(SqMat mat);
 #endif
