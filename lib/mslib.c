@@ -2,7 +2,7 @@
 void safeCopySqMat(SqMat mat1, SqMat * mat2) {
     free((*mat2).pValue);
     (*mat2).N=mat1.N;
-    *mat2.pValue=malloc(mat1.N*mat1.N);
+    *mat2.pValue=malloc(mat1.N*mat1.N*sizeof(double));
     int k=0;
     for(;k<mat1.N*mat1.N;k++) {
         *((*mat).pValue+k*sizeof(double))=*(mat1.pValue+k*sizeof(double));
@@ -10,7 +10,7 @@ void safeCopySqMat(SqMat mat1, SqMat * mat2) {
 }
 void initZeroSqMat(SqMat * mat, int N) {
     *mat.N=N;
-    *mat.pValue=malloc(N*N); // TODO check malloc sucedes
+    *mat.pValue=malloc(N*N*sizeof(double)); // TODO check malloc sucedes
     int k=0;
     for(;k<N*N;k++) {
         *((*mat).pValue+k*sizeof(double))=0;
@@ -18,7 +18,7 @@ void initZeroSqMat(SqMat * mat, int N) {
 }
 void initIdSqMat(SqMat * mat, int N) {
     *mat.N=N;
-    *mat.pValue=malloc(N*N); // TODO check malloc sucedes
+    *mat.pValue=malloc(N*N*sizeof(double)); // TODO check malloc sucedes
     int k=0;
     int k1=0;
     for(;k<N;k++) {
@@ -98,5 +98,18 @@ SqMat transSqMat(SqMat mat) {
         for(k1=0;k1<mat.N;k1++) {
             setVal(&toret,k,k1,getVal(mat,k1,k));
         }
+    }
+}
+void swapRows(SqMat * mat, int i, int j) {
+    double * tempRow=malloc(mat.N*sizeof(double));
+    int k=0;
+    for(;k<mat.N;k++) {
+        *(tempRow+k*sizeof(double))=getVal(*mat,i,k);
+    }
+    for(k=0;k<mat.N;k++) {
+        setVal(mat,i,k,getVal(*mat,j,k));
+    }
+    for(k=0;k<mat.N;k++) {
+        setVal(mat,j,k,*(tempRow+k*sizeof(double)));
     }
 }

@@ -74,4 +74,12 @@ SqMat multSqMat(SqMat mat1, SqMat mat2);
     @return the transpose of mat
 */
 SqMat transSqMat(SqMat mat);
+/**
+    Swap rows within a matrix
+    @param mat a refenrece to the matrix on which to operate
+    @param i the first rows index
+    @param j the second row index
+    @return void
+*/
+void swapRows(SqMat * mat, int i, int j);
 #endif
