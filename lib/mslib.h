@@ -97,4 +97,18 @@ void swapRows(SqMat * mat, int i, int j);
     @return the inverse of mat
 */
 // SqMat invSqMAt(SqMat mat);
+/**
+    Function to calculate the N matrix for the Pade approximation
+    @param mat the matrix argument
+    @param p for p, q Pade approximation
+    @param q for p, q Pade approximation
+*/
+SqMat PadeN(SqMat mat, int p, int q);
+/**
+    Function to calculate the D matrix for the Pade approximation
+    @param mat the matrix argument
+    @param p for p, q Pade approximation
+    @param q for p, q Pade approximation
+*/
+SqMat PadeD(SqMat mat, int p, int q);
 #endif

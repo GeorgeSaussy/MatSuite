@@ -124,3 +124,33 @@ void swapRows(SqMat * mat, int i, int j) {
         setVal(mat,j,k,*(tempRow+k*sizeof(double)));
     }
 }
+SqMat PadeN(SqMat mat, int p, int q) {
+    SqMat toret;
+    initIdSqMat(&toret,mat.N);
+    SqMat ongoing;
+    safeCopySqMat(toret,&ongoing);
+    int k=1;
+    double lambda=1.0;
+    for(;k<p;k++) {
+        lambda*=(p-k+1)/(p+q-j+1)/j;
+        safeCopySqMat(multSqMat(ongoing,mat),&ongoing);
+        safeCopySqMat(addSqMat(scaleSqMat(ongoing,lambda),toret),&toret);
+    }
+    return toret;
+}
+SqMat PadeD(SqMat mat, int p, int q) {
+    SqMat matPrime;
+    safeCopySqMat(scaleSqMat(mat,-1.0),matPrime);
+    SqMat toret;
+    initIdSqMat(&toret,matPrime.N);
+    SqMat ongoing;
+    safeCopySqMat(toret,&ongoing);
+    int k=1;
+    double lambda=1.0;
+    for(;k<p;k++) {
+        lambda*=(q-k+1)/(p+q-j+1)/j;
+        safeCopySqMat(multSqMat(ongoing,matPrime),&ongoing);
+        safeCopySqMat(addSqMat(scaleSqMat(ongoing,lambda),toret),&toret);
+    }
+    return toret;
+}
