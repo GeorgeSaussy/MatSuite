@@ -1,85 +1,64 @@
 #ifndef MSLIB
 #define MSLIB
-#include <vector>
-#include <iostream>
-#include <math.h>
-using namespace std;
 /**
-    Prints a matrix to std::out
-    @param A a matrix
+    Struct to hold a matrix
+*/
+struct SqMat {
+    int N; // the demension of the matrix
+    double * pValue; // the values in the matrix, stored left-to-right top-to-bottom
+}
+/**
+    Initialize a square matrix to be a matrix of all zeroes
+    @param mat a reference to the matrix to initialize
+    @param N the size of the matrix
+*/
+void initZeroSqMat(SqMat * mat, int N);
+/**
+    Initialize a square matrix to be an identity matrix
+    @param mat a reference to the matrix to initialize
+    @param N the size of the matrix
+*/
+void initIdSqMat(SqMat * mat, int N);
+/**
+    Function to get the value from the matrix
+    @param mat a reference to the matrix
+    @param i the row of the value
+    @param j the column of the value
+    @return the value found in the element
+    @warning returns 0.0 if indexes not in range
+*/
+double getVal(SqMat * mat, int i, int j);
+/**
+    Function to set a value in the matrix
+    @param mat a reference to a matrix
+    @param i the row of the value
+    @param j the column of the matrix
+    @param x the value to set
     @return void
+    @warning fails if indexes not in range
 */
-void matPrint(vector<vector<double> > A);
+void setVal(SqMat * mat, int i, int j, double x);
 /**
-    Function to add two matricies to one another
-    @param A the first summand
-    @param B the second summand
-    @return the sum A + B
-    @warning demensions of A and B must match
+    Calculate the value of a matrix scaled by a scalar
+    @param lambda the scalar
+    @param mat the matrix
+    @return the scaled matrix
 */
-vector<vector<double> > matAdd(vector<vector<double> > A, vector<vector<double> > B);
+SqMat scaleSqMat(SqMat mat, double lambda);
 /**
-    Function to perform matix multiplication
-    @param A first matrix factor
-    @param B seond matrix factor
-    @return the product A*B
-    @warning the width of A must equal the height of B
+    Add two matricies
+    @param mat1 the first matrix
+    @param mat2 the second matrix
+    @return the sum
+    @warning addition fails if mat1.N!=mat2.N
 */
-vector<vector<double> > matMult(vector<vector<double> > A, vector<vector<double> > B);
+SqMat addSqMat(SqMat mat1, SqMat mat2);
 /**
-    Function to perform scalar multiplication on a matrix
-    @param A a sqare matrix
-    @param t a scalar
-    @return the value A*t
+    Function to multiply two matricies
+    @param mat1 the first factor
+    @param mat2 the second factor
+    @return the product
+    @warning multiplication fails if mat1.N!=mat2.N
 */
-vector<vector<double> > scalarMult(vector<vector<double> > A, double t);
-/**
-    Function to calculate the one norm of a matrix
-    @param A a square matrix
-    @return the one norm of A
-*/
-double oneNorm(vector<vector<double> > A);
-/**
-    Function to calculate the traspose of a retangular matrix
-    @param P a matrix
-    @return the transpose of P
-*/
-vector<vector<double> > matT(vector<vector<double> > P);
-/**
-    Function to swap the rows of a matrix
-    @param A a matrix
-    @param i the first row index to swap
-    @param j the second row index to swap
-    @return a matrix with rows i and j interchanged
-    @warning must 0 <= i,j < A.size()
-*/
-vector<vector<double> > swapRows(vector<vector<double> >, int i, int j);
-/**
-    Function to calculate the inverse of a matrix
-    @param A a square invertable matrix
-    @return the inverse of A
-    @warning A cannot be singular
-*/
-vector<vector<double> > matInv(vector<vector<double> > A);
-/**
-    Calculate the Q function for Pade's approximation
-    @param A a square matrix
-    @param p degree of polynomial approximation
-    @return a square matrix given by (2.1) in Ward 1977
-*/
-vector<vector<double> > Q(vector<vector<double> > A, int p);
-/**
-    First draft function to calculate exp(At), where A is a matrix and t is a
-    scalar, following Ward 1977
-    @param A a square matrix
-    @param t a scalar
-    @return exp(At) as a matix
-*/
-vector<vector<double> > matExp(vector<vector<double> > A);
-/**
-    Function to perform the BALANCE procedure
-    @param n
-    @param b
-*/
-void balance(int n, int b);
+SqMat multSqMat(SqMat mat1, SqMat mat2);
 #endif

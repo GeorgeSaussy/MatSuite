@@ -4,7 +4,12 @@
 #include <math.h>
 using namespace std;
 // TODO test implementation
-// TODO implement BALANCE
+void initZeroSqMat(SqMat * mat, int N) {
+    *mat.N=N;
+    *mat.pValue=malloc(N*N); // TODO check malloc sucedes
+    
+}
+
 void matPrint(vector<vector<double> > A) {
     cout<<endl;
     for(int k=0;k<A.size();k++) {
