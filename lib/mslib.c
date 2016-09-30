@@ -1,4 +1,13 @@
 #include "mslib.h"
+void safeCopySqMat(SqMat mat1, SqMat * mat2) {
+    free((*mat2).pValue);
+    (*mat2).N=mat1.N;
+    *mat2.pValue=malloc(mat1.N*mat1.N);
+    int k=0;
+    for(;k<mat1.N*mat1.N;k++) {
+        *((*mat).pValue+k*sizeof(double))=*(mat1.pValue+k*sizeof(double));
+    }
+}
 void initZeroSqMat(SqMat * mat, int N) {
     *mat.N=N;
     *mat.pValue=malloc(N*N); // TODO check malloc sucedes
@@ -77,6 +86,17 @@ SqMat multSqMat(SqMat mat1, SqMat mat2) {
                 }
                 setVal(&toret,k,k1,x);
             }
+        }
+    }
+}
+SqMat transSqMat(SqMat mat) {
+    SqMat toret;
+    initZeroSqMat(&toret,mat.N);
+    int k=0;
+    int k1=0;
+    for(;k<mat.N;k++) {
+        for(k1=0;k1<mat.N;k1++) {
+            setVal(&toret,k,k1,getVal(mat,k1,k));
         }
     }
 }

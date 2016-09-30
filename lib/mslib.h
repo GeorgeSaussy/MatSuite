@@ -8,6 +8,13 @@ struct SqMat {
     double * pValue; // the values in the matrix, stored left-to-right top-to-bottom
 }
 /**
+    Copy one matrix to another without worring about memory leaks
+    @param mat1 the matrix to copy
+    @param mat2 a reference to where the matrix is to be copied
+    @return void
+*/
+void safeCopySqMat(SqMat mat1, SqMat * mat2);
+/**
     Initialize a square matrix to be a matrix of all zeroes
     @param mat a reference to the matrix to initialize
     @param N the size of the matrix
@@ -61,4 +68,10 @@ SqMat addSqMat(SqMat mat1, SqMat mat2);
     @warning multiplication fails if mat1.N!=mat2.N
 */
 SqMat multSqMat(SqMat mat1, SqMat mat2);
+/**
+    Function to calculate the transpose of a square matrix
+    @param mat the matrix to transpose
+    @return the transpose of mat
+*/
+SqMat transSqMat(SqMat mat);
 #endif
