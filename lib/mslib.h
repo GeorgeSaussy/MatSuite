@@ -7,26 +7,26 @@
 struct SqMat {
     int N; // the demension of the matrix
     double * pValue; // the values in the matrix, stored left-to-right top-to-bottom
-}
+};
 /**
     Copy one matrix to another without worring about memory leaks
     @param mat1 the matrix to copy
     @param mat2 a reference to where the matrix is to be copied
     @return void
 */
-void safeCopySqMat(SqMat mat1, SqMat * mat2);
+void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2);
 /**
     Initialize a square matrix to be a matrix of all zeroes
     @param mat a reference to the matrix to initialize
     @param N the size of the matrix
 */
-void initZeroSqMat(SqMat * mat, int N);
+void initZeroSqMat(struct SqMat * mat, int N);
 /**
     Initialize a square matrix to be an identity matrix
     @param mat a reference to the matrix to initialize
     @param N the size of the matrix
 */
-void initIdSqMat(SqMat * mat, int N);
+void initIdSqMat(struct SqMat * mat, int N);
 /**
     Function to get the value from the matrix
     @param mat a reference to the matrix
@@ -35,7 +35,7 @@ void initIdSqMat(SqMat * mat, int N);
     @return the value found in the element
     @warning returns 0.0 if indexes not in range
 */
-double getVal(SqMat * mat, int i, int j);
+double getVal(struct SqMat mat, int i, int j);
 /**
     Function to set a value in the matrix
     @param mat a reference to a matrix
@@ -45,14 +45,14 @@ double getVal(SqMat * mat, int i, int j);
     @return void
     @warning fails if indexes not in range
 */
-void setVal(SqMat * mat, int i, int j, double x);
+void setVal(struct SqMat * mat, int i, int j, double x);
 /**
     Calculate the value of a matrix scaled by a scalar
     @param lambda the scalar
     @param mat the matrix
     @return the scaled matrix
 */
-SqMat scaleSqMat(SqMat mat, double lambda);
+struct SqMat scaleSqMat(struct SqMat mat, double lambda);
 /**
     Add two matricies
     @param mat1 the first matrix
@@ -60,7 +60,7 @@ SqMat scaleSqMat(SqMat mat, double lambda);
     @return the sum
     @warning addition fails if mat1.N!=mat2.N
 */
-SqMat addSqMat(SqMat mat1, SqMat mat2);
+struct SqMat addSqMat(struct SqMat mat1, struct SqMat mat2);
 /**
     Function to multiply two matricies
     @param mat1 the first factor
@@ -68,7 +68,7 @@ SqMat addSqMat(SqMat mat1, SqMat mat2);
     @return the product
     @warning multiplication fails if mat1.N!=mat2.N
 */
-SqMat multSqMat(SqMat mat1, SqMat mat2);
+struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2);
 /**
     Function to calculate the power of a matrix
     @param mat the base matrix
@@ -76,13 +76,13 @@ SqMat multSqMat(SqMat mat1, SqMat mat2);
     @return mat^j
     @warning must have j>=0
 */
-SqMat powSqMat(SqMat mat, int j);
+struct SqMat powSqMat(struct SqMat mat, int j);
 /**
     Function to calculate the transpose of a square matrix
     @param mat the matrix to transpose
     @return the transpose of mat
 */
-SqMat transSqMat(SqMat mat);
+struct SqMat transSqMat(struct SqMat mat);
 /**
     Swap rows within a matrix
     @param mat a refenrece to the matrix on which to operate
@@ -90,25 +90,32 @@ SqMat transSqMat(SqMat mat);
     @param j the second row index
     @return void
 */
-void swapRows(SqMat * mat, int i, int j);
-/** TODO
+void swapRows(struct SqMat * mat, int i, int j);
+/**
     Calculate the inverse of a matrix using Gaussian elemination
     @param mat the matrix to invert
     @return the inverse of mat
 */
-// SqMat invSqMAt(SqMat mat);
+struct SqMat invSqMat(struct SqMat mat);
 /**
     Function to calculate the N matrix for the Pade approximation
     @param mat the matrix argument
     @param p for p, q Pade approximation
     @param q for p, q Pade approximation
 */
-SqMat PadeN(SqMat mat, int p, int q);
+struct SqMat PadeN(struct SqMat mat, int p, int q);
 /**
     Function to calculate the D matrix for the Pade approximation
     @param mat the matrix argument
-    @param p for p, q Pade approximation
-    @param q for p, q Pade approximation
+    @param p first argument for p, q Pade approximation
+    @param q second argument for p, q Pade approximation
 */
-SqMat PadeD(SqMat mat, int p, int q);
+struct SqMat PadeD(struct SqMat mat, int p, int q);
+/**
+    Calculate exp(mat) with the p, q Pade method
+    @param mat the matrix to exponentiate
+    @param p first argument for p, q Pade approximation
+    @param q second argument for p, q Pade approximation
+*/
+struct SqMat expPade(struct SqMat mat, int p, int q);
 #endif
