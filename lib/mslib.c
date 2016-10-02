@@ -167,6 +167,17 @@ struct SqMat invSqMat(struct SqMat mat) {
     }
     return toret;
 }
+double oneNorm(struct SqMat mat) {
+    double toret=0;
+    for(int k=0;k<mat.N;k++) {
+        for(int k1=0;k<mat.N;k1++) {
+            if(abs(get(mat,k,k1))>toret) {
+                toret=abs(get(mat,k,k1));
+            }
+        }
+    }
+    return toret;
+}
 struct SqMat PadeN(struct SqMat mat, int p, int q) {
     struct SqMat toret;
     initIdSqMat(&toret,mat.N);
@@ -197,7 +208,15 @@ struct SqMat PadeD(struct SqMat mat, int p, int q) {
 }
 struct SqMat expPade(struct SqMat mat, int p, int q) {
     struct SqMat toret;
-    safeCopySqMat(multSqMat(invSqMat(PadeD(mat,p,q)),PadeN(mat,p,q)),&toret);
+    double norm=oneNorm(mat);
+    int m=1;
+    if(norm>0.5) {
+        m=1+((int)(norm*2));
+    }
+    struct SqMat matPrime;
+    safeCopySqMat(scaleSqMat(mat,1.0/m),&matPrime);
+    safeCopySqMat(multSqMat(invSqMat(PadeD(matPrime,p,q)),PadeN(matPrime,p,q)),&toret);
+    safeCopySqMat(powSqMat(toret,m),&toret);
     return toret;
 }
 int main() {

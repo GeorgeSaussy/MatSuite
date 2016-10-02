@@ -1,6 +1,5 @@
 #ifndef MSLIB
 #define MSLIB
-// TODO add print matrix
 /**
     Struct to hold a matrix
 */
@@ -98,10 +97,17 @@ void swapRows(struct SqMat * mat, int i, int j);
 */
 struct SqMat invSqMat(struct SqMat mat);
 /**
+    Calculate the one norm of a matrix
+    @param mat the matrix argument
+    @return double the one norm of mat
+*/
+double oneNorm(struct SqMat mat);
+/**
     Function to calculate the N matrix for the Pade approximation
     @param mat the matrix argument
     @param p for p, q Pade approximation
     @param q for p, q Pade approximation
+    @return $ N_{p,q} (mat) $
 */
 struct SqMat PadeN(struct SqMat mat, int p, int q);
 /**
@@ -109,6 +115,7 @@ struct SqMat PadeN(struct SqMat mat, int p, int q);
     @param mat the matrix argument
     @param p first argument for p, q Pade approximation
     @param q second argument for p, q Pade approximation
+    @return $ D_{p,q} (mat) $
 */
 struct SqMat PadeD(struct SqMat mat, int p, int q);
 /**
@@ -116,6 +123,7 @@ struct SqMat PadeD(struct SqMat mat, int p, int q);
     @param mat the matrix to exponentiate
     @param p first argument for p, q Pade approximation
     @param q second argument for p, q Pade approximation
+    @return p, q Pade approximation of exp(mat)
 */
 struct SqMat expPade(struct SqMat mat, int p, int q);
 #endif
