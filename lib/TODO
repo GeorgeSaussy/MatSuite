@@ -1,7 +1,5 @@
 TODO
 
-Write struct SqMat and SqMat algebra-functions in c
-
 Write Krylov functions in C using SqMat
 
 Optimize with CUDA or SPIRV

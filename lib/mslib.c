@@ -11,7 +11,7 @@ void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
 }
 void initZeroSqMat(struct SqMat * mat, int N) {
     mat->N=N;
-    mat->pValue=malloc(N*N*sizeof(double)); // TODO check malloc sucedes
+    mat->pValue=malloc(N*N*sizeof(double)); // TODO check malloc succeeds
     int k=0;
     for(;k<N*N;k++) {
         *(mat->pValue+k*sizeof(double))=0;
@@ -19,7 +19,7 @@ void initZeroSqMat(struct SqMat * mat, int N) {
 }
 void initIdSqMat(struct SqMat * mat, int N) {
     mat->N=N;
-    mat->pValue=malloc(N*N*sizeof(double)); // TODO check malloc sucedes
+    mat->pValue=malloc(N*N*sizeof(double)); // TODO check malloc succeeds
     int k=0;
     int k1=0;
     for(;k<N;k++) {
