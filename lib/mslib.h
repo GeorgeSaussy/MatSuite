@@ -126,4 +126,12 @@ struct SqMat PadeD(struct SqMat mat, int p, int q);
     @return p, q Pade approximation of exp(mat)
 */
 struct SqMat expPade(struct SqMat mat, int p, int q);
+/**
+    Function to perform the Krylov aproximation for matrix mat and vector v
+    @param mat a matrix to exponentiate
+    @param v a vector by which to multiply exp(t*mat)
+    @param tau the step-size
+    @return another vector of the same demension as v as a pointer to doubles
+*/
+double * expv(struct SqMat mat, double t, double * v, double tau);
 #endif

@@ -169,8 +169,10 @@ struct SqMat invSqMat(struct SqMat mat) {
 }
 double oneNorm(struct SqMat mat) {
     double toret=0;
-    for(int k=0;k<mat.N;k++) {
-        for(int k1=0;k<mat.N;k1++) {
+    int k=0;
+    int k1=0;
+    for(;k<mat.N;k++) {
+        for(k1=0;k<mat.N;k1++) {
             if(abs(get(mat,k,k1))>toret) {
                 toret=abs(get(mat,k,k1));
             }
@@ -219,6 +221,73 @@ struct SqMat expPade(struct SqMat mat, int p, int q) {
     safeCopySqMat(powSqMat(toret,m),&toret);
     return toret;
 }
-int main() {
-    return 0;
+double * expv(struct SqMat mat, double t, double * v, double tau) {
+    int k=0;
+    int k1=0;
+    int j=0;
+    int i=0;
+    double tk=0;
+    double beta=0;
+    double tempvar=0;
+    double errloc=0;
+    for(;k<mat.N;k++) {
+        *(w+k*sizeof(double))=*(v+k*sizeof(double));
+    }
+    struct SqMat H;
+    initZeroSqMat(&H, mat.N+2);
+    struct SqMat F;
+    initZeroSqMat(&F,mat.N+2);
+    double * w=malloc(mat.N*sizeof(double));
+    double * v1=malloc(mat.N*sizeof(double));
+    double * p=malloc(mat.N*sizeof(double));
+    while(tk<t) {
+        for(k=0;k<mat.N;k++) {
+            *(v+k*sizeof(double))=*(w+k*sizeof(double));
+            beta+=(*(v+k*sizeof(double)))*(*(v+k*sizeof(double)));
+        }
+        beta=sqrt(beta);
+        for(k=0;k<mat.N;k++) {
+            *(v1+k*sizeof(double))=*(v+k*sizeof(double))/beta;
+        }
+        for(j=0;j<mat.N;j++) { // Arnoldi process
+            for(k=0;k<mat.N;k++) {
+                *(p+k*sizeof(double))=0;
+                for(k1=0;k1<mat.N;k1++) {
+                    *(p+k*sizeof(double))+=getVal(mat,k,k1)*(*(v1+k*sizeof(double)));
+                }
+            }
+            for(i=0;i<mat.N;i++) {
+                innprod=0;
+                for(k=0;k<mat.N;k++) {
+                    tempvar+=(*(v1+k*sizeof(double)))*(*(p+k*sizeof(double)));
+                }
+                setVal(&H,i,j,tempvar);
+                for(k=0;k<mat.N;k++) {
+                    *(p+k*sizeof(double))=*(p+k*sizeof(double))-getVal(H,i,j)*(*(v1+k*sizeof(double)));
+                }
+            }
+            tempvar=0;
+            for(k=0;k<mat.N;k++) {
+                tempvar+=(*(p+k*sizeof(double)))*(*(p+k*sizeof(double)));
+            }
+            setVal(&H,mat.N,mat.N-1,tempvar);
+            if(getVal(H,mat.N,mat.N)<=tol_abs(mat)) { // TODO WHAT IS THIS ???
+                happy_breakdown(); // TODO WHAT IS THIS ???
+            }
+            for(k=0;k<mat.N;k++) {
+                *(v1+k*sizeof(double))=*(p+k*sizeof(double))/getVal(H,mat.N,mat.N-1);
+            }
+        }
+        setVal(&H,mat.N+1,mat.N,1.0);
+        errloc=delta_tol+1; // TODO add delta_tol
+        while(errloc>delta_tol) {
+            F=exp(tau*H); // pick exp
+            for(k=0;k<mat.N;k++) {
+                *(w+k*sizeof(double))=beta*(*(v1+k*sizeof(double)))*getVal(F,k,1);
+            }
+            errloc= local error estimate; // TODO ESTIMATE
+        }
+        tk+=tau;
+    }
+    return w;
 }
