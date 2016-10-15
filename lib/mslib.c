@@ -221,7 +221,7 @@ struct SqMat expPade(struct SqMat mat, int p, int q) {
     safeCopySqMat(powSqMat(toret,m),&toret);
     return toret;
 }
-double * expv(struct SqMat mat, double t, double * v, double tau) {
+double * expvKrylov(struct SqMat mat, double t, double * v, double tau, double minerr) {
     int k=0;
     int k1=0;
     int j=0;
@@ -230,7 +230,10 @@ double * expv(struct SqMat mat, double t, double * v, double tau) {
     double beta=0;
     double tempvar=0;
     double errloc=0;
-    for(;k<mat.N;k++) {
+    double err1=0;
+    double err2=0;
+    double matvnorm=0;
+    for(k=0;k<mat.N;k++) {
         *(w+k*sizeof(double))=*(v+k*sizeof(double));
     }
     struct SqMat H;
@@ -240,6 +243,16 @@ double * expv(struct SqMat mat, double t, double * v, double tau) {
     double * w=malloc(mat.N*sizeof(double));
     double * v1=malloc(mat.N*sizeof(double));
     double * p=malloc(mat.N*sizeof(double));
+    for(k=0;k<mat.N;k++) {
+        *(w+k*sizeof(double))=0;
+        for(k1=0;k1<mat.N;k1++) {
+            *(w+k*sizeof(double))+=getVal(mat,k,k1)*(*(v+k1*sizeof(double)));
+        }
+    }
+    for(k=0;k<mat.N;k++) {
+        matvnorm+=(*(w+k*sizeof(double)))*(*(w+k*sizeof(double)));
+    }
+    matvnorm=sqrt(matvnorm);
     while(tk<t) {
         for(k=0;k<mat.N;k++) {
             *(v+k*sizeof(double))=*(w+k*sizeof(double));
@@ -285,7 +298,18 @@ double * expv(struct SqMat mat, double t, double * v, double tau) {
             for(k=0;k<mat.N;k++) {
                 *(w+k*sizeof(double))=beta*(*(v1+k*sizeof(double)))*getVal(F,k,1);
             }
-            errloc= local error estimate; // TODO ESTIMATE
+            // LOCAL TRUNCATION ERROR ESTIMATE
+            err1=beta*abs(tau*getVal(H,mat.N,mat.N-1)*getVal(phi1(scaleSqMat(H,tau)),mat.N-1,1));
+            err2=beta*matvnorm*abs(tau*tau*getval(H,mat.N,mat.N-1)*getVal(phi2(H,tau),mat.N-1,1));
+            if(err1>10*err2) {
+                errloc=err2;
+            }
+            else if(err1>err2) {
+                errloc=err2/(1-(err2/err1));
+            }
+            else {
+                errloc=err1;
+            }
         }
         tk+=tau;
     }

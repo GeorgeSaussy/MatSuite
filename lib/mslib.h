@@ -131,7 +131,8 @@ struct SqMat expPade(struct SqMat mat, int p, int q);
     @param mat a matrix to exponentiate
     @param v a vector by which to multiply exp(t*mat)
     @param tau the step-size
+    @param minerr the roundoff error used
     @return another vector of the same demension as v as a pointer to doubles
 */
-double * expv(struct SqMat mat, double t, double * v, double tau);
+double * expv(struct SqMat mat, double t, double * v, double tau, double minerr);
 #endif
