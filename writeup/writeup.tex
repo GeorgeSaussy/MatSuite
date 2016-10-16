@@ -1,0 +1,120 @@
+\documentclass{article}
+
+\usepackage{amssymb,amsmath,amsthm,amsfonts,bbm,accents,mathtools,dsfont}
+\usepackage{upgreek}
+\usepackage{gensymb}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{comment}
+\usepackage{geometry}
+\usepackage{graphicx,ctable,booktabs}
+\usepackage[]{units}
+\usepackage{setspace}
+\usepackage{wrapfig}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\newcommand{\lint}{\int\limits}
+\newcommand{\dint}{\displaystyle\int}
+\newcommand{\llim}{\lim\limits}
+\newcommand{\lsum}{\sum\limits}
+\newcommand{\clos}[1]{\overline{#1}}
+\newcommand{\trans}[1]{#1^\top}
+\def\mean#1{\left< #1 \right>}
+\newcommand{\error}{\ensuremath{{}^{{}_{_\sim}}}}
+\newcommand{\minus}{\ensuremath{{}^{{}_{_{{-}}}}}\!}
+
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\osc}{osc}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Ima}{Im}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\trace}{tr}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+%
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\makeatother
+
+\makeatletter
+\renewcommand*\env@matrix[1][\arraystretch]{%
+	\edef\arraystretch{#1}%
+	\hskip -\arraycolsep
+	\let\@ifnextchar\new@ifnextchar
+	\array{*\c@MaxMatrixCols c}}
+\makeatother
+
+\newcommand*{\Value}{\frac{1}{2}x^2}%
+
+\newtheoremstyle{exampstyle}
+{} % Space above
+{\parsep} % Space below
+{} % Body font
+{} % Indent amount
+{\itshape} % Theorem head font
+{.} % Punctuation after theorem head
+{.5em} % Space after theorem head
+{} % Theorem head spec (can be left empty, meaning `normal')
+\theoremstyle{exampstyle} \newtheorem*{remark}{Remark}
+
+\renewcommand{\complement}[1]{#1^\mathsf{c}}
+\newcommand{\R}{\mathds{R}}
+\newcommand{\N}{\mathds{N}}
+\newcommand{\C}{\mathds{C}}
+\newcommand{\Z}{\mathds{Z}}
+\newcommand{\Q}{\mathds{Q}}
+\newcommand{\D}{\mathds{D}}
+\newcommand{\Hyp}{\mathds{H}}
+\newcommand{\1}{\mathds{1}}
+\newcommand{\e}{\mathds{E}}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\compcent}[1]{\vcenter{\hbox{$#1\circ$}}}
+\newcommand{\comp}{\mathbin{\mathchoice
+		{\compcent\scriptstyle}{\compcent\scriptstyle}
+		{\compcent\scriptscriptstyle}{\compcent\scriptscriptstyle}}}
+
+\providecommand*{\unit}[1]{\ensuremath{\mathrm{\,#1}}}
+
+\makeatletter
+\providecommand{\diff}%
+{\@ifnextchar^{\DIfF}{\DIfF^{}}}
+\def\DIfF^#1{ \mathop{\mathrm{\mathstrut d}} \nolimits^{#1}\gobblespace }
+\def\gobblespace{\futurelet\diffarg\opspace}
+\def\opspace{%
+	\let\DiffSpace\!
+	\ifx\diffarg( \let\DiffSpace\relax \else
+	\ifx\diffarg\[ \let\DiffSpace\relax \else
+	\ifx\diffarg\] \let\DiffSpace\relax \else
+	\ifx\diffarg\{ \let\DiffSpace\relax \fi\fi\fi\DiffSpace}
+\providecommand{\deriv}[3][]{ \frac{\diff^{#1}#2}{\diff #3^{#1}}}
+\providecommand{\pderiv}[3][]{ \frac{\partial^{#1}#2}{\partial #3^{#1}}}
+
+\newcommand{\dderiv}{\displaystyle\deriv}
+\newcommand{\dpderiv}{\displaystyle\pderiv}
+
+\begin{document}
+
+\title{MatSuite Writeup}
+\author{George Saussy}
+\maketitle
+
+In this project we attempt to build a GPU optimized implementation of Krylov wave propagation for quantum states.  
+
+\section{Motivation}
+
+\section{Mathematical background}
+
+\section{Project design}
+
+\section{Results}
+
+\section{Discussion}
+
+\end{document}
