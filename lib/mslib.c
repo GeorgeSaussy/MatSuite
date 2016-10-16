@@ -1,5 +1,6 @@
 #include "mslib.h"
 #include <stdlib.h>
+#include <math.h>
 void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
     free(mat2->pValue);
     mat2->N=mat1.N;
@@ -234,9 +235,6 @@ double * expvKrylov(struct SqMat mat, double t, double * v, double tau, double m
     double err2=0;
     double matvnorm=0;
     //double tau=gamma*(tol/eta)**(1/r)
-    for(k=0;k<mat.N;k++) {
-        *(w+k*sizeof(double))=*(v+k*sizeof(double));
-    }
     struct SqMat H;
     initZeroSqMat(&H, mat.N+2);
     struct SqMat F;
@@ -254,6 +252,9 @@ double * expvKrylov(struct SqMat mat, double t, double * v, double tau, double m
         matvnorm+=(*(w+k*sizeof(double)))*(*(w+k*sizeof(double)));
     }
     matvnorm=sqrt(matvnorm);
+    for(k=0;k<mat.N;k++) {
+        *(w+k*sizeof(double))=*(v+k*sizeof(double));
+    }
     while(tk<t) {
         for(k=0;k<mat.N;k++) {
             *(v+k*sizeof(double))=*(w+k*sizeof(double));
@@ -271,7 +272,7 @@ double * expvKrylov(struct SqMat mat, double t, double * v, double tau, double m
                 }
             }
             for(i=0;i<mat.N;i++) {
-                innprod=0;
+                tempvar=0;
                 for(k=0;k<mat.N;k++) {
                     tempvar+=(*(v1+k*sizeof(double)))*(*(p+k*sizeof(double)));
                 }
@@ -296,13 +297,12 @@ double * expvKrylov(struct SqMat mat, double t, double * v, double tau, double m
         double delta_tol=.01; // TODO add delta_tol
         errloc=delta_tol+1;
         while(errloc>delta_tol) {
-            F=exp(tau*H); // pick exp
+            F=expPade(scaleSqMat(H,tau),14,14); // TODO pick exp
             for(k=0;k<mat.N;k++) {
                 *(w+k*sizeof(double))=beta*(*(v1+k*sizeof(double)))*getVal(F,k,1);
             }
             // LOCAL TRUNCATION ERROR ESTIMATE
-            phi1=f1/tau;
-            err1=beta*abs(getval(H,mat.N,mat.N-1)*getVal(F,1,0)),mat.N-1,1));
+            err1=beta*abs(getval(H,mat.N,mat.N-1)*getVal(F,1,0));
             err2=beta*matvnorm*abs(getval(H,mat.N,mat.N-1)*getVal(F,2,0));
             if(err1>10*err2) {
                 errloc=err2;
