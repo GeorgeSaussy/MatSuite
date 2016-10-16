@@ -233,6 +233,7 @@ double * expvKrylov(struct SqMat mat, double t, double * v, double tau, double m
     double err1=0;
     double err2=0;
     double matvnorm=0;
+    //double tau=gamma*(tol/eta)**(1/r)
     for(k=0;k<mat.N;k++) {
         *(w+k*sizeof(double))=*(v+k*sizeof(double));
     }
@@ -284,23 +285,25 @@ double * expvKrylov(struct SqMat mat, double t, double * v, double tau, double m
                 tempvar+=(*(p+k*sizeof(double)))*(*(p+k*sizeof(double)));
             }
             setVal(&H,mat.N,mat.N-1,tempvar);
-            if(getVal(H,mat.N,mat.N)<=tol_abs(mat)) { // TODO WHAT IS THIS ???
-                happy_breakdown(); // TODO WHAT IS THIS ???
-            }
+            //if(getVal(H,mat.N,mat.N)<=tol_abs(mat)) { // TODO WHAT IS THIS ???
+            //    happy_breakdown(); // TODO WHAT IS THIS ???
+            //}
             for(k=0;k<mat.N;k++) {
                 *(v1+k*sizeof(double))=*(p+k*sizeof(double))/getVal(H,mat.N,mat.N-1);
             }
         }
         setVal(&H,mat.N+1,mat.N,1.0);
-        errloc=delta_tol+1; // TODO add delta_tol
+        double delta_tol=.01; // TODO add delta_tol
+        errloc=delta_tol+1;
         while(errloc>delta_tol) {
             F=exp(tau*H); // pick exp
             for(k=0;k<mat.N;k++) {
                 *(w+k*sizeof(double))=beta*(*(v1+k*sizeof(double)))*getVal(F,k,1);
             }
             // LOCAL TRUNCATION ERROR ESTIMATE
-            err1=beta*abs(tau*getVal(H,mat.N,mat.N-1)*getVal(phi1(scaleSqMat(H,tau)),mat.N-1,1));
-            err2=beta*matvnorm*abs(tau*tau*getval(H,mat.N,mat.N-1)*getVal(phi2(H,tau),mat.N-1,1));
+            phi1=f1/tau;
+            err1=beta*abs(getval(H,mat.N,mat.N-1)*getVal(F,1,0)),mat.N-1,1));
+            err2=beta*matvnorm*abs(getval(H,mat.N,mat.N-1)*getVal(F,2,0));
             if(err1>10*err2) {
                 errloc=err2;
             }
