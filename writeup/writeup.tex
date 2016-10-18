@@ -105,16 +105,41 @@
 \author{George Saussy}
 \maketitle
 
-In this project we attempt to build a GPU optimized implementation of Krylov wave propagation for quantum states.  
+In this project we attempt to build a GPU optimized implementation of Krylov wave propagation for quantum states. In the process we, implement a small suite of functions designed to handle matrices. This system will be used to train an neural network that will speed up the calculation of the propagation of quantum states. The neural network can then be used to aid in the design of molecules which would be computationally infeasible otherwise.
+
+% 5 6 7 8 9 10
 
 \section{Motivation}
+Physicist must frequently calculate the propagation of a quantum state. This calculation is often extremely computationally expensive, even for simple systems. This problem is only exasperated when many bodies are introduced or the Hamiltonian is not well behaved. %3 
+
+However, as physical methods play a greater role in chemistry, more efficient means of calculating wave propagation in many body systems must be explored. The aim of this research should be to bring down the cost of understanding the the behaviour of particles and molecules in generic settings, so that the methods found can be generally applied without needing to be customized for a given problem. %2
+
+In the interest of generality the most generic form of a quantum system is given by the Schrodinger equation, $i\hbar d_t|\phi\rangle = H|\phi\rangle$, where $|\phi\rangle$ is the quantum state and $H$ is the Hamiltonian under which the system is evolving. The generic solution to this equation is then 
+\[ |\phi (t)\rangle = \exp(-iHt/\hbar ) |\phi_0\rangle \]
+However, this computation is practice is very expensive because of the exponential. In particular the generic definition of $\exp (A)$ for matrix $A$ is given by 
+\[ \exp (A) = \sum_{k=0}^\infty A^k/k! \]
+which does not converge quickly for $\norm{A}>>1$. % 5
+(In fact, the error term given only a constant number of terms are used in the above equation will grow exponentially with $\norm{A}$.)
+Bringing the computation time for matrix exponentiation down would allow theorists to consider systems with a greater set of pure quantum states, and potentially to numerically consider the behaviour of systems that were previously infeasible to treat. % 2
+
+In this project, I present the design and implementation of a suite of GPU optimized software to speed up these computations. % 1
+
+% 14 15
 
 \section{Mathematical background}
 
+% 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+
 \section{Project design}
+
+% 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
 
 \section{Results}
 
+$$ FORTHCOMING $$
+
 \section{Discussion}
+
+$$ FORTHCOMING $$
 
 \end{document}
