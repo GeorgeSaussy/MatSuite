@@ -1,0 +1,7 @@
+INSTALL
+
+To compile MatSuite, just run `make' in this directory.
+
+To generate documentation in ./lib, run `make documentation'.
+
+To remove generated files, run `make clean'.

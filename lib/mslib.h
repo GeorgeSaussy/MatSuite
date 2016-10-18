@@ -1,5 +1,6 @@
-#ifndef MSLIB
-#define MSLIB
+#ifndef MSLIB_H
+#define MSLIB_H
+/** @file */
 /**
     Struct to hold a matrix
 */
