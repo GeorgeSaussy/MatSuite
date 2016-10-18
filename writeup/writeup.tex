@@ -135,8 +135,38 @@ In this project, I present the design and implementation of a suite of GPU optim
 
 (More detailed documentation for the suite can be found in the code. Run \texttt{doxygen} in the repository's home directory and a directory containing technical documentation in HTML will be generated.)
 
-This project has two overall goals: 1) to create code that will perform wave propagation as efficiently as possible, and 2) to make this implementation as portable and easy to use as possible to use as possible. To that end,
-% 4 5 6 7 8 9 10 11 12 13 14 15
+This project has two overall goals: 1) to create code that will perform wave propagation as efficiently as possible, and 2) to make this implementation as portable and easy to use as possible to use as possible. To that end, there will be four functions implemented, each representing different approximation methods.
+
+The primary computational structure used in the program is a \texttt{struct SqMat}. This struct is a square matrix of real numbers, and the current implementation of the the library only supports real matrices. 
+\newline
+
+\texttt{double* expv(struct SqMat mat, double t, double * v, double tau, double minerr);}
+
+A function to perform the the Krylov estimation for $\exp(t*mat)v$ where \texttt{tau} is the time step used and \texttt{minerr} is the minimum error allowed (must be greater than machine error on double operations). This algorithm is optimized for the case \texttt{mat} is large and sparse. (It is the user's responsibility ensure that $Dim(v)=\sqrt{Dim(mat)}$.)  
+\newline
+
+\texttt{struct SqMat expPade(struct SqMat mat, int p, int q);}
+
+An implementation of an older algorithm to implement the p,q-Pade approximation for $\exp(mat)$. By default, $p=q=14$ should be used.  
+\newline
+
+\texttt{struct SqMat }
+\texttt{struct SqMat expTaylor(struct SqMat mat, int k);}
+
+An implementation of the Taylor approximation of 
+$$\exp(mat)\approx\sum_{n=0}^k(mat)^n/n!$$
+This should not be used in practice but is included for completion.
+\newline
+
+A small set of example programs demonstrating how the functions should be implemented in the near future.
+
+% 9 10 11 12 13 14 15
+\section{TODO}
+The project now forks into two sub-project: 1) begin the GPU optimization process and 2) implement more features.
+
+While GPU optimization is simple enough to understand, the practical steps are more finely detailed. As of now, we are tentatively considering using SPIR-V from the Vulkan API. The advantaged of this implementation over something like CUDA or OpenCL is that SPIR-V does not require the programmer to configure the the code for any possible computer architecture. SPIR-V allows the programmer to focus on higher level program design. One draw back on SPIR-V, especially in comparison to CUDA, is that the Vulkan API has not been generally accepted, so one older systems, the library may not run. (Vulkan is an API slotted to replace OpenGL, and SPIR-V is its GPU coding paradigm.)
+
+The other direction, implementing more features, is more strait forward. First the structs \texttt{struct Complex} and \texttt{struct SqMatCplx} for complex numbers and complex matrices respectively. These will be used in a new implementation of the above functions. These new functions are absolutely necessary, as nearly all Hamiltonians are complex. (The decision to focus on real matrices first was to get a functioning implementation ready as soon as possible, even with limited functionality.) Of course once the functions are implemented, they will need to be GPU optimized as well, but this should be more strait forward as 
 
 \section{Results}
 
