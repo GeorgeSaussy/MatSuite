@@ -1,19 +1,17 @@
 \documentclass{article}
 
 \usepackage{amssymb,amsmath,amsthm,amsfonts,bbm,accents,mathtools,dsfont}
-\usepackage{upgreek}
-\usepackage{courier}
-\usepackage{gensymb}
-\usepackage{tabularx}
-\usepackage{enumitem}
-\usepackage{comment}
-\usepackage{geometry}
-\usepackage{graphicx,ctable,booktabs}
+\usepackage{upgreek, courier, gensymb, tabularx, enumitem, comment, geometry}
+\usepackage{graphicx, ctable, booktabs, setspace, wrapfig, tikz, calc}
 \usepackage[]{units}
-\usepackage{setspace}
-\usepackage{wrapfig}
-\usepackage{tikz}
-\usetikzlibrary{calc}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
 
 \newcommand{\lint}{\int\limits}
 \newcommand{\dint}{\displaystyle\int}
@@ -106,7 +104,7 @@
 \author{George Saussy}
 \maketitle
 
-In this project we attempt to build a GPU optimized implementation of Krylov wave propagation for quantum states. In the process we, implement a small suite of functions designed to handle matrices. This system will be used to train an neural network that will speed up the calculation of the propagation of quantum states. The neural network can then be used to aid in the design of molecules which would be computationally infeasible otherwise.
+In this project we attempt to build a GPU optimized implementation of Krylov wave propagation for quantum states. In the process we, implement a small suite of functions designed to handle matrices. This system will be used to train an neural network that will speed up the calculation of the propagation of quantum states. The neural network can then be used to aid in the design of molecules which would be computationally infeasible otherwise. % 4
 
 % 5 6 7 8 9 10
 
@@ -129,11 +127,24 @@ In this project, I present the design and implementation of a suite of GPU optim
 
 \section{Mathematical background}
 
-% 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+The literature on efficient matrix exponentiation is fairly concise. There are fewer than a dozen papers that contribute to the field and only three or four that are core to the progress of the field. We choose to focus on two algorithms, the Pade approximation and the Kylov approximation. % 3
+
+The Pade approximation for matrix exponentiation is based on the Pade approximate, where a function is calculated by taking the ratio of two power series. We know the k-th polynomial coefficient in the Taylor expansion of $\exp(x)$ at zero is $k!^{-1}$. If we posit that 
+$$ \exp(x)\approx\frac{P(x)}{Q(x)} $$
+for 
+$$ P(x)=\sum_{k=0}^p a_kx^k, Q(x)=\sum_{k=0}^q b_kx^k $$
+then we can calculate the coefficients of the above approximation by equating terms in the approximation to terms in the Taylor expansion. For a given value of $p$ and $q$ the coefficients can be precomputed and stored in a lookup table for faster computation. In addition, algorithms exist to bound the error from this approximation, namely the one found in Ward 1977 ('Numerical Computation of the Matrix Exponential with Accuracy Estimate' SIAM J. NUMBER. ANAL. Vol 14, No. 4). This is essential to making sure the use of this approximation possible, because without an knowledge of the error the approximation is worthless. % 6
+
+The second approximation used is the Krylov approximation. The state-of-the-art implementation is \href{http://www.maths.uq.edu.au/expokit/}{Explokit} by Roger Sidje. While this repository is stable, it is implemented in Fortran and Matlab. A C/SPIR-V implementation should outperform this suite. The Krylov approximation used in this project is an iterative method, which is optimized for sparse matrix exponentiation. In the generic case we use the Arnoldi iteration. (Later,   
+Lanczos iteration should be implemented for the case the matrix can be guaranteed to be a valid Hamiltonian.)
+
+For sparse matrix $A$ and vector $v,$ Arnoldi iteration calculates $\exp(A)v$ by finding an ortho-normal basis for the set of vectors $\{v,Av,A^2v,...,A^mv\}$ for some typically small $m<Dim(v)$. This can be done efficiently by the Gram-Schmidt procedure. The algorithm then projects $A$ onto this so-called Krylov basis. Where the eigenvalues can be computed efficiently. Once the eigenvalues of a matrix are known, calculating its exponential is extremely simple ($O(\sqrt{Dim(A)}$ in fact). Thus by taking advantage of the fact that the matrix is sparse allows the algorithm to terminate more quickly.
+
+% 10 11 12 13 14 15
 
 \section{Project design}
 
-(More detailed documentation for the suite can be found in the code. Run \texttt{doxygen} in the repository's home directory and a directory containing technical documentation in HTML will be generated.)
+(More detailed documentation for the suite can be found in the code. Run \texttt{make documentation} in the repository's home directory and a directory containing technical documentation in HTML will be generated.)
 
 This project has two overall goals: 1) to create code that will perform wave propagation as efficiently as possible, and 2) to make this implementation as portable and easy to use as possible to use as possible. To that end, there will be four functions implemented, each representing different approximation methods.
 
@@ -150,7 +161,11 @@ A function to perform the the Krylov estimation for $\exp(t*mat)v$ where \texttt
 An implementation of an older algorithm to implement the p,q-Pade approximation for $\exp(mat)$. By default, $p=q=14$ should be used.  
 \newline
 
-\texttt{struct SqMat }
+\texttt{struct SqMat expSOFT(struct SqMat mat);}
+
+An implementation of the SOFT method of matrix exponentiation. This is not yet fully implemented.
+\newline
+
 \texttt{struct SqMat expTaylor(struct SqMat mat, int k);}
 
 An implementation of the Taylor approximation of 
@@ -158,16 +173,43 @@ $$\exp(mat)\approx\sum_{n=0}^k(mat)^n/n!$$
 This should not be used in practice but is included for completion.
 \newline
 
+In addition there are a few other functions calculated in the the suite. The assist the above calculations, but are also documented and available to users as well. All of the following are standard in Matlab, but a pure C implementation outperforms Matlab by approximately factor 10 in runtime.
+\newline
+
+\texttt{struct SqMat invSqMat(struct SqMat);}
+
+An implementation of Gaussian matrix inversion.
+\newline
+
+\texttt{struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2);}
+
+An implementation of real matrix multiplication.
+\newline
+
+\texttt{struct SqMat powSqMat(struct SqMat mat, int j);}
+
+A function to take the j-th power of matrix $mat$.
+\newline
+
 A small set of example programs demonstrating how the functions should be implemented in the near future.
 
 % 9 10 11 12 13 14 15
 \section{TODO}
+
 The project now forks into two sub-project: 1) begin the GPU optimization process and 2) implement more features.
 
 While GPU optimization is simple enough to understand, the practical steps are more finely detailed. As of now, we are tentatively considering using SPIR-V from the Vulkan API. The advantaged of this implementation over something like CUDA or OpenCL is that SPIR-V does not require the programmer to configure the the code for any possible computer architecture. SPIR-V allows the programmer to focus on higher level program design. One draw back on SPIR-V, especially in comparison to CUDA, is that the Vulkan API has not been generally accepted, so one older systems, the library may not run. (Vulkan is an API slotted to replace OpenGL, and SPIR-V is its GPU coding paradigm.)
 
-The other direction, implementing more features, is more strait forward. First the structs \texttt{struct Complex} and \texttt{struct SqMatCplx} for complex numbers and complex matrices respectively. These will be used in a new implementation of the above functions. These new functions are absolutely necessary, as nearly all Hamiltonians are complex. (The decision to focus on real matrices first was to get a functioning implementation ready as soon as possible, even with limited functionality.) Of course once the functions are implemented, they will need to be GPU optimized as well, but this should be more strait forward as 
+The other direction, implementing more features, is more strait forward. First the structs \texttt{struct Complex} and \texttt{struct SqMatCplx} for complex numbers and complex matrices respectively. These will be used in a new implementation of the above functions. These new functions are absolutely necessary, as nearly all Hamiltonians are complex. (The decision to focus on real matrices first was to get a functioning implementation ready as soon as possible, even with limited functionality.) Of course once the functions are implemented, they will need to be GPU optimized as well, but this should be more strait forward using the real versions of the functions as a draft.
 
+Finally, after both of these steps are completed, wrappers should be implemented so that these functions can be called in Python, Matlab, and Julia. In addition, additional scripts should be written to implement machine learning APIs. However the exact design of this final API is not set in stone.
+
+Ongoing performance tests against the state-of-the-art are being performed.
+
+\section{Conclusion}
+
+
+\begin{comment}
 \section{Results}
 
 $$ FORTHCOMING $$
@@ -175,5 +217,5 @@ $$ FORTHCOMING $$
 \section{Discussion}
 
 $$ FORTHCOMING $$
-
+\end{comment}
 \end{document}
