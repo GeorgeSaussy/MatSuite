@@ -4,7 +4,7 @@
 /**
     Struct to hold a matrix
 */
-struct SqMat {
+struct SqMatRl {
     int N; // the demension of the matrix
     double * pValue; // the values in the matrix, stored left-to-right top-to-bottom
 };
@@ -14,19 +14,19 @@ struct SqMat {
     @param mat2 a reference to where the matrix is to be copied
     @return void
 */
-void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2);
+void safeCopySqMatRl(struct SqMatRl mat1, struct SqMatRl * mat2);
 /**
     Initialize a square matrix to be a matrix of all zeroes
     @param mat a reference to the matrix to initialize
     @param N the size of the matrix
 */
-void initZeroSqMat(struct SqMat * mat, int N);
+void initZeroSqMatRl(struct SqMatRl * mat, int N);
 /**
     Initialize a square matrix to be an identity matrix
     @param mat a reference to the matrix to initialize
     @param N the size of the matrix
 */
-void initIdSqMat(struct SqMat * mat, int N);
+void initIdSqMatRl(struct SqMatRl * mat, int N);
 /**
     Function to get the value from the matrix
     @param mat a reference to the matrix
@@ -35,7 +35,7 @@ void initIdSqMat(struct SqMat * mat, int N);
     @return the value found in the element
     @warning returns 0.0 if indexes not in range
 */
-double getVal(struct SqMat mat, int i, int j);
+double getValRl(struct SqMatRl mat, int i, int j);
 /**
     Function to set a value in the matrix
     @param mat a reference to a matrix
@@ -45,14 +45,14 @@ double getVal(struct SqMat mat, int i, int j);
     @return void
     @warning fails if indexes not in range
 */
-void setVal(struct SqMat * mat, int i, int j, double x);
+void setValRl(struct SqMatRl * mat, int i, int j, double x);
 /**
     Calculate the value of a matrix scaled by a scalar
     @param lambda the scalar
     @param mat the matrix
     @return the scaled matrix
 */
-struct SqMat scaleSqMat(struct SqMat mat, double lambda);
+struct SqMatRl scaleSqMatRl(struct SqMatRl mat, double lambda);
 /**
     Add two matricies
     @param mat1 the first matrix
@@ -60,7 +60,7 @@ struct SqMat scaleSqMat(struct SqMat mat, double lambda);
     @return the sum
     @warning addition fails if mat1.N!=mat2.N
 */
-struct SqMat addSqMat(struct SqMat mat1, struct SqMat mat2);
+struct SqMatRl addSqMatRl(struct SqMatRl mat1, struct SqMatRl mat2);
 /**
     Function to multiply two matricies
     @param mat1 the first factor
@@ -68,7 +68,7 @@ struct SqMat addSqMat(struct SqMat mat1, struct SqMat mat2);
     @return the product
     @warning multiplication fails if mat1.N!=mat2.N
 */
-struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2);
+struct SqMatRl multSqMatRl(struct SqMatRl mat1, struct SqMatRl mat2);
 /**
     Function to calculate the power of a matrix
     @param mat the base matrix
@@ -76,13 +76,13 @@ struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2);
     @return mat^j
     @warning must have j>=0
 */
-struct SqMat powSqMat(struct SqMat mat, int j);
+struct SqMatRl powSqMatRl(struct SqMatRl mat, int j);
 /**
     Function to calculate the transpose of a square matrix
     @param mat the matrix to transpose
     @return the transpose of mat
 */
-struct SqMat transSqMat(struct SqMat mat);
+struct SqMatRl transSqMatRl(struct SqMatRl mat);
 /**
     Swap rows within a matrix
     @param mat a refenrece to the matrix on which to operate
@@ -90,19 +90,19 @@ struct SqMat transSqMat(struct SqMat mat);
     @param j the second row index
     @return void
 */
-void swapRows(struct SqMat * mat, int i, int j);
+void swapRowsRl(struct SqMatRl * mat, int i, int j);
 /**
     Calculate the inverse of a matrix using Gaussian elemination
     @param mat the matrix to invert
     @return the inverse of mat
 */
-struct SqMat invSqMat(struct SqMat mat);
+struct SqMatRl invSqMatRl(struct SqMatRl mat);
 /**
     Calculate the one norm of a matrix
     @param mat the matrix argument
     @return double the one norm of mat
 */
-double oneNorm(struct SqMat mat);
+double oneNormRl(struct SqMatRl mat);
 /**
     Function to calculate the N matrix for the Pade approximation
     @param mat the matrix argument
@@ -110,7 +110,7 @@ double oneNorm(struct SqMat mat);
     @param q for p, q Pade approximation
     @return $ N_{p,q} (mat) $
 */
-struct SqMat PadeN(struct SqMat mat, int p, int q);
+struct SqMatRl PadeNRl(struct SqMatRl mat, int p, int q);
 /**
     Function to calculate the D matrix for the Pade approximation
     @param mat the matrix argument
@@ -118,7 +118,7 @@ struct SqMat PadeN(struct SqMat mat, int p, int q);
     @param q second argument for p, q Pade approximation
     @return $ D_{p,q} (mat) $
 */
-struct SqMat PadeD(struct SqMat mat, int p, int q);
+struct SqMatRl PadeDRl(struct SqMatRl mat, int p, int q);
 /**
     Calculate exp(mat) with the p, q Pade method
     @param mat the matrix to exponentiate
@@ -126,7 +126,7 @@ struct SqMat PadeD(struct SqMat mat, int p, int q);
     @param q second argument for p, q Pade approximation
     @return p, q Pade approximation of exp(mat)
 */
-struct SqMat expPade(struct SqMat mat, int p, int q);
+struct SqMatRl expPadeRl(struct SqMatRl mat, int p, int q);
 /**
     Function to perform the Krylov aproximation for matrix mat and vector v
     @param mat a matrix to exponentiate
@@ -135,5 +135,20 @@ struct SqMat expPade(struct SqMat mat, int p, int q);
     @param minerr the roundoff error used
     @return another vector of the same demension as v as a pointer to doubles
 */
-double * expv(struct SqMat mat, double t, double * v, double tau, double minerr);
+double * expvKrylovRl(struct SqMatRl mat, double t, double * v, double tau, double minerr);
+/**
+    Struct to store an imaginary number
+*/
+struct Complex {
+    double re; // the real part of the complex number
+    double im; // the imaginary part of the complex number
+};
+/**
+    Function to store a complex matrix
+*/
+struct SqMat {
+    int N; // the sixze of the matrix
+    struct Complex * pValue;
+};
+
 #endif
