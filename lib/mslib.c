@@ -435,3 +435,61 @@ struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2) {
     }
     return toret;
 }
+struct SqMat powSqMat(struct SqMat mat, int j) {
+    struct SqMat toret;
+    if(j>=0) {
+        initIdSqMat(&toret,mat.N);
+        if(j>=1) {
+            int k=0;
+            for(;k<j;k++) {
+                toret=multSqMat(toret,mat);
+            }
+        }
+    }
+    return toret;
+}
+struct SqMat transSqMat(struct SqMat mat) {
+    struct SqMat toret;
+    initZeroSqMat(&toret,mat.N);
+    int k=0;
+    int k1=0;
+    for(;k<mat.N;k++) {
+        for(k1=0;k1<mat.N;k1++) {
+            setVal(&toret,k,k1,getVal(mat,k1,k));
+        }
+    }
+    return toret;
+}
+void swapRows(struct SqMat * mat, int i, int j) {
+    struct Complex * tempRow=malloc(mat->N*sizeof(struct Complex));
+    int k=0;
+    for(;k<mat->N;k++) {
+        *(tempRow+(k+i*mat->N)*sizeof(struct Complex))=getVal(*mat,i,k);
+    }
+    for(k=0;k<mat->N;k++) {
+        setVal(mat,i,k,getVal(*mat,j,k));
+    }
+    for(k=0;k<mat->N;k++) {
+        setVal(mat,i,k,*(tempRow+(k+i*mat->N)*sizeof(struct Complex)));
+    }
+}
+struct SqMat invSqMat(struct SqMat mat) { // TODO
+    struct SqMat toret;
+    return toret;
+}
+double oneNorm(struct SqMat mat) {
+    double toret=0.0;
+    int k=0;
+    int k1=0;
+    struct Complex testVal;
+    for(;k<mat.N;k++) {
+        for(k1=0;k1<mat.N;k1++) {
+            testVal=getVal(mat,k,k1);
+            if(testVal.re*testVal.re+testVal.im*testVal.im>toret) {
+                toret=testVal.re*testVal.re+testVal.im*testVal.im;
+            }
+        }
+    }
+    toret=sqrt(toret);
+    return toret;
+}

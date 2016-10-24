@@ -225,5 +225,39 @@ struct SqMat addSqMat(struct SqMat mat1, struct SqMat mat2);
     @warning multiplication fails if mat1.N!=mat2.N
 */
 struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2);
-
+/**
+    Function to calculate the power of a matrix
+    @param mat the base matrix
+    @param j the power
+    @return mat^j
+    @warning must have j>=0
+*/
+struct SqMat powSqMat(struct SqMat mat, int j);
+/**
+    Function to calculate the transpose of a square matrix
+    @param mat the matrix to transpose
+    @return the transpose of mat
+    @warning must j>=0
+*/
+struct SqMat transSqMat(struct SqMat mat);
+/**
+    Swap rows within a matrix
+    @param mat a refenrece to the matrix on which to operate
+    @param i the first rows index
+    @param j the second row index
+    @return void
+*/
+void swapRows(struct SqMat * mat, int i, int j);
+/**
+    Calculate the inverse of a matrix using Gaussian elemination
+    @param mat the matrix to invert
+    @return the inverse of mat
+*/
+struct SqMat invSqMat(struct SqMat mat);
+/**
+    Calculate the one norm of a matrix
+    @param mat the matrix argument
+    @return double the one norm of mat
+*/
+double oneNorm(struct SqMat mat);
 #endif
