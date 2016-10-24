@@ -151,12 +151,26 @@ struct Complex {
 */
 struct Complex addCmplx(struct Complex num1, struct Complex num2);
 /**
+    Function to subtract complex numbers
+    @param num1 the first complex number
+    @param num2 the second complex number
+    @return the difference num1-num2
+*/
+struct Complex subCmplx(struct Complex num1, struct Complex num2);
+/**
     Function to multiply complex numbers
     @param num1 the first factor
     @param num2 the second factor
     @return the product num1*num2
 */
 struct Complex multCmplx(struct Complex num1, struct Complex num2);
+/**
+    Function to divide complex numbers
+    @param num1 the numerator
+    @param num2 the denominator
+    @return the fraction num1/num2
+*/
+struct Complex divCmplx(struct Complex num1, struct Complex num2);
 /**
     A struct to store the a complex matrix
 */

@@ -137,6 +137,7 @@ struct SqMatRl invSqMatRl(struct SqMatRl mat) {
     int i=0;
     int j=0;
     int iMax=0;
+    double f=0;
     for(;k<n;k++) {
         iMax=k;
         for(k1=k;k1<n;k1++) {
@@ -148,7 +149,7 @@ struct SqMatRl invSqMatRl(struct SqMatRl mat) {
         swapRowsRl(&ongoing,k,iMax);
         swapRowsRl(&toret,k,iMax);
         for(i=k+1;i<n;i++) {
-            double f=getValRl(ongoing,i,k)/getValRl(ongoing,k,k);
+            f=getValRl(ongoing,i,k)/getValRl(ongoing,k,k);
             for(j=k+1;j<n;j++) {
                 setValRl(&ongoing,i,j,getValRl(ongoing,i,j)-f*getValRl(ongoing,k,j));
                 setValRl(&toret,i,j,getValRl(toret,i,j)-f*getValRl(toret,k,j));
@@ -324,10 +325,22 @@ struct Complex addCmplx(struct Complex num1, struct Complex num2) {
     toret.im=num1.im+num2.im;
     return toret;
 }
+struct Complex subCmplx(struct Complex num1, struct Complex num2) {
+    struct Complex toret;
+    toret.re=num1.re-num2.re;
+    toret.im=num1.im-num2.im;
+    return toret;
+}
 struct Complex multCmplx(struct Complex num1, struct Complex num2) {
     struct Complex toret;
     toret.re=num1.re*num2.re-num1.im*num2.im;
     toret.im=num1.re*num2.im+num1.im*num2.re;
+    return toret;
+}
+struct Complex divCmplx(struct Complex num1, struct Complex num2) {
+    struct Complex toret;
+    toret.re=(num1.re*num2.re+num1.im*num2.im)/(num2.re*num2.re+num2.im*num2.im);
+    toret.im=(num1.im*num2.re-num1.re*num2.im)/(num2.re*num2.re+num2.im*num2.im);
     return toret;
 }
 void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
@@ -475,6 +488,52 @@ void swapRows(struct SqMat * mat, int i, int j) {
 }
 struct SqMat invSqMat(struct SqMat mat) { // TODO
     struct SqMat toret;
+    int n=mat.N;
+    initIdSqMat(&toret,n);
+    struct SqMat ongoing;
+    safeCopySqMat(mat,&ongoing);
+    int k=0;
+    int k1=0;
+    int i=0;
+    int j=0;
+    int iMax=0;
+    struct Complex compVal1;
+    struct Complex compVal2;
+    struct Complex f;
+    struct Complex zero;
+    zero.re=0.0;
+    zero.im=0.0;
+    for(;k<n;k++) {
+        iMax=k;
+        for(k1=k;k1<n;k1++) {
+            compVal1=getValRl(mat,k1,k)l;
+            compVal2=getValRl(mat,iMax,k);
+            if(compVal1.re*compVal.re+compVal1.im*compVal.im>compVal.re*compVal.re+compVal.im*compVal.im) {
+                iMax=k1;
+            }
+        }
+        // warning: A singular if A[iMax][k] == 0
+        swapRowsRl(&ongoing,k,iMax);
+        swapRowsRl(&toret,k,iMax);
+        for(i=k+1;i<n;i++) {
+            f=divCmplx(getVal(ongoing,i,k),getVal(ongoing,k,k));
+            for(j=k+1;j<n;j++) {
+                setVal(&ongoing,i,j,subCmplx(getVal(ongoing,i,j),multCmpl(f,getVal(ongoing,k,j))));
+                setVal(&toret,i,j,subCmplx(getVal(toret,i,j),multCmplx(f,getVal(toret,k,j))));
+            }
+            setVal(&ongoing,i,k,zero);
+        }
+    }
+    // reduce
+    for(k=n-1;k>=0;k--) {
+        for(i=k-1;i>=0;i--) {
+            double f=getValRl(ongoing,i,k)/getValRl(ongoing,k,k);
+            for(j=0;j<n;j++) {
+                setValRl(&ongoing,i,j,getValRl(ongoing,i,j)-f*getValRl(ongoing,i,j));
+                setValRl(&toret,i,j,getValRl(toret,i,j)-f*getValRl(toret,i,j));
+            }
+        }
+    }
     return toret;
 }
 double oneNorm(struct SqMat mat) {
