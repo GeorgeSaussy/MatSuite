@@ -4,7 +4,7 @@
 void safeCopySqMatRl(struct SqMatRl mat1, struct SqMatRl * mat2) {
     free(mat2->pValue);
     mat2->N=mat1.N;
-    mat2->pValue=malloc(mat1.N*mat1.N*sizeof(double));
+    mat2->pValue=(double*) malloc(mat1.N*mat1.N*sizeof(double));
     int k=0;
     for(;k<mat1.N*mat1.N;k++) {
         *(mat2->pValue+k*sizeof(double))=*(mat1.pValue+k*sizeof(double));
@@ -12,7 +12,7 @@ void safeCopySqMatRl(struct SqMatRl mat1, struct SqMatRl * mat2) {
 }
 void initZeroSqMatRl(struct SqMatRl * mat, int N) {
     mat->N=N;
-    mat->pValue=malloc(N*N*sizeof(double)); // TODO check malloc succeeds
+    mat->pValue=(double*) malloc(N*N*sizeof(double)); // TODO check malloc succeeds
     int k=0;
     for(;k<N*N;k++) {
         *(mat->pValue+k*sizeof(double))=0;
@@ -20,7 +20,7 @@ void initZeroSqMatRl(struct SqMatRl * mat, int N) {
 }
 void initIdSqMatRl(struct SqMatRl * mat, int N) {
     mat->N=N;
-    mat->pValue=malloc(N*N*sizeof(double)); // TODO check malloc succeeds
+    mat->pValue=(double*) malloc(N*N*sizeof(double)); // TODO check malloc succeeds
     int k=0;
     int k1=0;
     for(;k<N;k++) {
@@ -114,7 +114,7 @@ struct SqMatRl transSqMatRl(struct SqMatRl mat) {
     }
 }
 void swapRowsRl(struct SqMatRl * mat, int i, int j) {
-    double * tempRow=malloc(mat->N*sizeof(double));
+    double * tempRow=(double*) malloc(mat->N*sizeof(double));
     int k=0;
     for(;k<mat->N;k++) {
         *(tempRow+k*sizeof(double))=getValRl(*mat,i,k);
@@ -240,9 +240,9 @@ double * expvKrylovRl(struct SqMatRl mat, double t, double * v, double tau, doub
     initZeroSqMatRl(&H, mat.N+2);
     struct SqMatRl F;
     initZeroSqMatRl(&F,mat.N+2);
-    double * w=malloc(mat.N*sizeof(double));
-    double * v1=malloc(mat.N*sizeof(double));
-    double * p=malloc(mat.N*sizeof(double));
+    double * w=(double*) malloc(mat.N*sizeof(double));
+    double * v1=(double*) malloc(mat.N*sizeof(double));
+    double * p=(double*) malloc(mat.N*sizeof(double));
     for(k=0;k<mat.N;k++) {
         *(w+k*sizeof(double))=0;
         for(k1=0;k1<mat.N;k1++) {
@@ -346,7 +346,7 @@ struct Complex divCmplx(struct Complex num1, struct Complex num2) {
 void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
     free(mat2->pValue);
     mat2->N=mat1.N;
-    mat2->pValue=malloc(mat2->N*mat2->N*sizeof(struct Complex));
+    mat2->pValue=(struct Complex*) malloc(mat2->N*mat2->N*sizeof(struct Complex));
     int k=0;
     for(;k<mat2->N*mat2->N;k++) {
         *(mat2->pValue+k*sizeof(struct Complex))=*(mat1.pValue+k*sizeof(struct Complex));
@@ -354,7 +354,7 @@ void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
 }
 void initZeroSqMat(struct SqMat * mat, int N) {
     free(mat->pValue);
-    mat->pValue=malloc(N*N*sizeof(struct Complex));
+    mat->pValue=(struct Complex*) malloc(N*N*sizeof(struct Complex));
     mat->N=N;
     int k=0;
     struct Complex zero;
@@ -366,7 +366,7 @@ void initZeroSqMat(struct SqMat * mat, int N) {
 }
 void initIdSqMat(struct SqMat * mat, int N) {
     free(mat->pValue);
-    mat->pValue=malloc(N*N*sizeof(struct Complex));
+    mat->pValue=(struct Complex*) malloc(N*N*sizeof(struct Complex));
     mat->N=N;
     int k=0;
     int k1=0;
@@ -474,7 +474,7 @@ struct SqMat transSqMat(struct SqMat mat) {
     return toret;
 }
 void swapRows(struct SqMat * mat, int i, int j) {
-    struct Complex * tempRow=malloc(mat->N*sizeof(struct Complex));
+    struct Complex * tempRow=(struct Complex*) malloc(mat->N*sizeof(struct Complex));
     int k=0;
     for(;k<mat->N;k++) {
         *(tempRow+(k+i*mat->N)*sizeof(struct Complex))=getVal(*mat,i,k);
