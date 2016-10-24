@@ -210,6 +210,6 @@ struct SqMat addSqMat(struct SqMatRl mat1, struct SqMatRl mat2);
     @return the product
     @warning multiplication fails if mat1.N!=mat2.N
 */
-struct SqMat multSqMatRl(struct SqMat mat1, struct SqMat mat2);
+struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2);
 
 #endif

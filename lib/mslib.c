@@ -380,6 +380,50 @@ void setVal(struct SqMat * mat, int i, int j, struct Complex x) {
         *(mat->pValue+(i*mat->N+j)*sizeof(struct Complex))=x;
     }
 }
-struct SqMat scaleSqMat(struct SqMatRl mat, struct Complex lambda);
-struct SqMat addSqMat(struct SqMatRl mat1, struct SqMatRl mat2);
-struct SqMat multSqMatRl(struct SqMat mat1, struct SqMat mat2);
+struct SqMat scaleSqMat(struct SqMatRl mat, struct Complex lambda) {
+    struct SqMat toret;
+    initZero(&SqMat, mat.N);
+    int k=0;
+    int k1=0;
+    for(;k<mat.N;k++) {
+        for(k1=0;k1<mat.N;k1++) {
+            setVal(&toret,k,k1,multCmplx(getVal(mat,k,k1),lambda));
+        }
+    }
+    return toretl;
+}
+struct SqMat addSqMat(struct SqMatRl mat1, struct SqMatRl mat2) {
+    struct SqMat toret;
+    initZero(&toret, mat.N);
+    if(mat1.N==mat2.N) {
+        int k=0;
+        int k1=0;
+        for(;k<mat1.N;k++) {
+            for(k1=0;k1<mat1.N;k1++) {
+                setVal(&toret,k,k1,addCmplx(getVal(mat1,k,k1),getVal(mat2,k,k1)));
+            }
+        }
+    }
+    return toret;
+}
+struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2) {
+    struct SqMat toret;
+    initZero(&toret, mat1.N);
+    if(mat1.N==mat2.N) {
+        int k=0;
+        int k1=0;
+        int k2=0;
+        struct Complex value;
+        for(;k<mat1.N;k++) {
+            for(k1=0;k1<mat2.N;k1++) {
+                value.re=0.0;
+                value.im=0.0;
+                for(k2=0;k2<mat1.N;k2++) {
+                    value=addCmplx(value,multCmplx(getVal(mat1,k,k2),getVal(mat2,k2,k1)));
+                }
+                setVal(&toret,k,k1,value);
+            }
+        }
+    }
+    return toret;
+}
