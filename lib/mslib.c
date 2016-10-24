@@ -380,3 +380,6 @@ void setVal(struct SqMat * mat, int i, int j, struct Complex x) {
         *(mat->pValue+(i*mat->N+j)*sizeof(struct Complex))=x;
     }
 }
+struct SqMat scaleSqMat(struct SqMatRl mat, struct Complex lambda);
+struct SqMat addSqMat(struct SqMatRl mat1, struct SqMatRl mat2);
+struct SqMat multSqMatRl(struct SqMat mat1, struct SqMat mat2);

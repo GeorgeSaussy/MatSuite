@@ -188,4 +188,28 @@ struct Complex getVal(struct SqMat mat, int i, int j);
     @warning fails if indexes not in range
 */
 void setVal(struct SqMat * mat, int i, int j, struct Complex x);
+/**
+    Calculate the value of a matrix scaled by a scalar
+    @param lambda the scalar
+    @param mat the matrix
+    @return the scaled matrix
+*/
+struct SqMat scaleSqMat(struct SqMatRl mat, struct Complex lambda);
+/**
+    Add two matricies
+    @param mat1 the first matrix
+    @param mat2 the second matrix
+    @return the sum
+    @warning addition fails if mat1.N!=mat2.N
+*/
+struct SqMat addSqMat(struct SqMatRl mat1, struct SqMatRl mat2);
+/**
+    Function to multiply two matricies
+    @param mat1 the first factor
+    @param mat2 the second factor
+    @return the product
+    @warning multiplication fails if mat1.N!=mat2.N
+*/
+struct SqMat multSqMatRl(struct SqMat mat1, struct SqMat mat2);
+
 #endif
