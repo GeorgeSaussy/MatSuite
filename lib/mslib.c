@@ -145,8 +145,8 @@ struct SqMatRl invSqMatRl(struct SqMatRl mat) {
             }
         }
         // warning: A singular if A[iMax][k] == 0
-        swapRows(&ongoing,k,iMax);
-        swapRows(&toret,k,iMax);
+        swapRowsRl(&ongoing,k,iMax);
+        swapRowsRl(&toret,k,iMax);
         for(i=k+1;i<n;i++) {
             double f=getValRl(ongoing,i,k)/getValRl(ongoing,k,k);
             for(j=k+1;j<n;j++) {
@@ -174,8 +174,8 @@ double oneNormRl(struct SqMatRl mat) {
     int k1=0;
     for(;k<mat.N;k++) {
         for(k1=0;k<mat.N;k1++) {
-            if(abs(get(mat,k,k1))>toret) {
-                toret=abs(get(mat,k,k1));
+            if(abs(getValRl(mat,k,k1))>toret) {
+                toret=abs(getValRl(mat,k,k1));
             }
         }
     }
@@ -211,7 +211,11 @@ struct SqMatRl PadeDRl(struct SqMatRl mat, int p, int q) {
 }
 struct SqMatRl expPadeRl(struct SqMatRl mat, int p, int q) {
     struct SqMatRl toret;
+<<<<<<< HEAD
     double norm=oneNorm(mat);
+=======
+    double norm=oneNormRl(mat);
+>>>>>>> 8bdac49bb032b17c016452358caefde307581eb3
     int m=1;
     if(norm>0.5) {
         m=1+((int)(norm*2));
