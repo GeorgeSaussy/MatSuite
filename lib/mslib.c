@@ -211,11 +211,7 @@ struct SqMatRl PadeDRl(struct SqMatRl mat, int p, int q) {
 }
 struct SqMatRl expPadeRl(struct SqMatRl mat, int p, int q) {
     struct SqMatRl toret;
-<<<<<<< HEAD
-    double norm=oneNorm(mat);
-=======
     double norm=oneNormRl(mat);
->>>>>>> 8bdac49bb032b17c016452358caefde307581eb3
     int m=1;
     if(norm>0.5) {
         m=1+((int)(norm*2));
@@ -322,6 +318,18 @@ double * expvKrylovRl(struct SqMatRl mat, double t, double * v, double tau, doub
     }
     return w;
 }
+struct Complex addCmplx(struct Complex num1, struct Complex num2) {
+    struct Complex toret;
+    toret.re=num1.re+num2.re;
+    toret.im=num1.im+num2.im;
+    return toret;
+}
+struct Complex multCmplx(struct Complex num1, struct Complex num2) {
+    struct Complex toret;
+    toret.re=num1.re*num2.re-num1.im*num2.im;
+    toret.im=num1.re*num2.im+num1.im*num2.re;
+    return toret;
+}
 void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
     free(mat2->pValue);
     mat2->N=mat1.N;
@@ -380,9 +388,9 @@ void setVal(struct SqMat * mat, int i, int j, struct Complex x) {
         *(mat->pValue+(i*mat->N+j)*sizeof(struct Complex))=x;
     }
 }
-struct SqMat scaleSqMat(struct SqMatRl mat, struct Complex lambda) {
+struct SqMat scaleSqMat(struct SqMat mat, struct Complex lambda) {
     struct SqMat toret;
-    initZero(&SqMat, mat.N);
+    initZeroSqMat(&toret, mat.N);
     int k=0;
     int k1=0;
     for(;k<mat.N;k++) {
@@ -390,12 +398,12 @@ struct SqMat scaleSqMat(struct SqMatRl mat, struct Complex lambda) {
             setVal(&toret,k,k1,multCmplx(getVal(mat,k,k1),lambda));
         }
     }
-    return toretl;
+    return toret;
 }
-struct SqMat addSqMat(struct SqMatRl mat1, struct SqMatRl mat2) {
+struct SqMat addSqMat(struct SqMat mat1, struct SqMat mat2) {
     struct SqMat toret;
-    initZero(&toret, mat.N);
     if(mat1.N==mat2.N) {
+        initZeroSqMat(&toret, mat1.N);
         int k=0;
         int k1=0;
         for(;k<mat1.N;k++) {
@@ -408,7 +416,7 @@ struct SqMat addSqMat(struct SqMatRl mat1, struct SqMatRl mat2) {
 }
 struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2) {
     struct SqMat toret;
-    initZero(&toret, mat1.N);
+    initZeroSqMat(&toret, mat1.N);
     if(mat1.N==mat2.N) {
         int k=0;
         int k1=0;

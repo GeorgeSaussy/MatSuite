@@ -5,8 +5,9 @@ dox:
 	cd lib; doxygen Doxyfile
 	mv lib/html .
 	mv lib/latex .
+	cd latex; make
 
 clean:
 	$(RM) mslib.o
-	$(RM) -rf html/
-	$(RM) -rf latex/
+	$(RM) -r html/
+	$(RM) -r latex/

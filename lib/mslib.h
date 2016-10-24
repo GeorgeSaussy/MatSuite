@@ -144,6 +144,20 @@ struct Complex {
     double im;
 };
 /**
+    Function to add complex numbers
+    @param num1 the first complex number
+    @param num2 the second complex number
+    @return the sum nnum1+num2
+*/
+struct Complex addCmplx(struct Complex num1, struct Complex num2);
+/**
+    Function to multiply complex numbers
+    @param num1 the first factor
+    @param num2 the second factor
+    @return the product num1*num2
+*/
+struct Complex multCmplx(struct Complex num1, struct Complex num2);
+/**
     A struct to store the a complex matrix
 */
 struct SqMat {
@@ -194,7 +208,7 @@ void setVal(struct SqMat * mat, int i, int j, struct Complex x);
     @param mat the matrix
     @return the scaled matrix
 */
-struct SqMat scaleSqMat(struct SqMatRl mat, struct Complex lambda);
+struct SqMat scaleSqMat(struct SqMat mat, struct Complex lambda);
 /**
     Add two matricies
     @param mat1 the first matrix
@@ -202,7 +216,7 @@ struct SqMat scaleSqMat(struct SqMatRl mat, struct Complex lambda);
     @return the sum
     @warning addition fails if mat1.N!=mat2.N
 */
-struct SqMat addSqMat(struct SqMatRl mat1, struct SqMatRl mat2);
+struct SqMat addSqMat(struct SqMat mat1, struct SqMat mat2);
 /**
     Function to multiply two matricies
     @param mat1 the first factor
