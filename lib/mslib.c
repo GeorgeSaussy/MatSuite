@@ -506,19 +506,19 @@ struct SqMat invSqMat(struct SqMat mat) { // TODO
     for(;k<n;k++) {
         iMax=k;
         for(k1=k;k1<n;k1++) {
-            compVal1=getValRl(mat,k1,k)l;
-            compVal2=getValRl(mat,iMax,k);
-            if(compVal1.re*compVal.re+compVal1.im*compVal.im>compVal.re*compVal.re+compVal.im*compVal.im) {
+            compVal1=getVal(mat,k1,k);
+            compVal2=getVal(mat,iMax,k);
+            if(compVal1.re*compVal1.re+compVal1.im*compVal1.im>compVal2.re*compVal2.re+compVal2.im*compVal2.im) {
                 iMax=k1;
             }
         }
         // warning: A singular if A[iMax][k] == 0
-        swapRowsRl(&ongoing,k,iMax);
-        swapRowsRl(&toret,k,iMax);
+        swapRows(&ongoing,k,iMax);
+        swapRows(&toret,k,iMax);
         for(i=k+1;i<n;i++) {
             f=divCmplx(getVal(ongoing,i,k),getVal(ongoing,k,k));
             for(j=k+1;j<n;j++) {
-                setVal(&ongoing,i,j,subCmplx(getVal(ongoing,i,j),multCmpl(f,getVal(ongoing,k,j))));
+                setVal(&ongoing,i,j,subCmplx(getVal(ongoing,i,j),multCmplx(f,getVal(ongoing,k,j))));
                 setVal(&toret,i,j,subCmplx(getVal(toret,i,j),multCmplx(f,getVal(toret,k,j))));
             }
             setVal(&ongoing,i,k,zero);
@@ -527,10 +527,10 @@ struct SqMat invSqMat(struct SqMat mat) { // TODO
     // reduce
     for(k=n-1;k>=0;k--) {
         for(i=k-1;i>=0;i--) {
-            double f=getValRl(ongoing,i,k)/getValRl(ongoing,k,k);
+            f=divCmplx(getVal(ongoing,i,k),getVal(ongoing,k,k));
             for(j=0;j<n;j++) {
-                setValRl(&ongoing,i,j,getValRl(ongoing,i,j)-f*getValRl(ongoing,i,j));
-                setValRl(&toret,i,j,getValRl(toret,i,j)-f*getValRl(toret,i,j));
+                setVal(&ongoing,i,j,subCmplx(getVal(ongoing,i,j),multCmplx(f,getVal(ongoing,i,j))));
+                setVal(&toret,i,j,subCmplx(getVal(toret,i,j),multCmplx(f,getVal(toret,i,j))));
             }
         }
     }
