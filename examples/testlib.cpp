@@ -8,8 +8,9 @@
 using namespace std;
 struct SqMat randomUnitValElmSqMat(int N) {
     struct SqMat toret;
+    initZeroSqMat(&toret,N);
     if(N>0) {
-        initZeroSqMat(&toret, N);
+        zeroSqMat(&toret);
         double theta=0.0;
         struct Complex matVal;
         for(int k=0;k<N;k++) {

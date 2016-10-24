@@ -319,26 +319,26 @@ double * expvKrylovRl(struct SqMatRl mat, double t, double * v, double tau, doub
     }
     return w;
 }
-struct Complex addCmplx(struct Complex num1, struct Complex num2) {
-    struct Complex toret;
+Complex addCmplx(Complex num1, Complex num2) {
+    Complex toret;
     toret.re=num1.re+num2.re;
     toret.im=num1.im+num2.im;
     return toret;
 }
-struct Complex subCmplx(struct Complex num1, struct Complex num2) {
-    struct Complex toret;
+Complex subCmplx(Complex num1, Complex num2) {
+    Complex toret;
     toret.re=num1.re-num2.re;
     toret.im=num1.im-num2.im;
     return toret;
 }
-struct Complex multCmplx(struct Complex num1, struct Complex num2) {
-    struct Complex toret;
+Complex multCmplx(Complex num1, Complex num2) {
+    Complex toret;
     toret.re=num1.re*num2.re-num1.im*num2.im;
     toret.im=num1.re*num2.im+num1.im*num2.re;
     return toret;
 }
-struct Complex divCmplx(struct Complex num1, struct Complex num2) {
-    struct Complex toret;
+Complex divCmplx(Complex num1, Complex num2) {
+    Complex toret;
     toret.re=(num1.re*num2.re+num1.im*num2.im)/(num2.re*num2.re+num2.im*num2.im);
     toret.im=(num1.im*num2.re-num1.re*num2.im)/(num2.re*num2.re+num2.im*num2.im);
     return toret;
@@ -346,62 +346,72 @@ struct Complex divCmplx(struct Complex num1, struct Complex num2) {
 void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
     free(mat2->pValue);
     mat2->N=mat1.N;
-    mat2->pValue=(struct Complex*) malloc(mat2->N*mat2->N*sizeof(struct Complex));
+    mat2->pValue=(Complex*) malloc(mat2->N*mat2->N*sizeof(Complex));
     int k=0;
     for(;k<mat2->N*mat2->N;k++) {
-        *(mat2->pValue+k*sizeof(struct Complex))=*(mat1.pValue+k*sizeof(struct Complex));
+        *(mat2->pValue+k*sizeof(Complex))=*(mat1.pValue+k*sizeof(Complex));
     }
 }
 void initZeroSqMat(struct SqMat * mat, int N) {
-    free(mat->pValue);
-    mat->pValue=(struct Complex*) malloc(N*N*sizeof(struct Complex));
+    //free(mat->pValue);
+    mat->pValue=(Complex*) malloc(N*N*sizeof(Complex));
     mat->N=N;
     int k=0;
-    struct Complex zero;
+    Complex zero;
     zero.re=0.0;
     zero.im=0.0;
-    for(;k<N*N;k++) {
-        *(mat->pValue+k*sizeof(struct Complex))=zero;
+    for(k=0;k<N*N;k++) {
+        *(mat->pValue+k*sizeof(Complex))=zero;
+    }
+}
+void zeroSqMat(struct SqMat * mat) {
+    int N=mat->N;
+    int k=0;
+    Complex zero;
+    zero.re=0.0;
+    zero.im=0.0;
+    for(k=0;k<N*N;k++) {
+        *(mat->pValue+k*sizeof(Complex))=zero;
     }
 }
 void initIdSqMat(struct SqMat * mat, int N) {
     free(mat->pValue);
-    mat->pValue=(struct Complex*) malloc(N*N*sizeof(struct Complex));
+    mat->pValue=(Complex*) malloc(N*N*sizeof(Complex));
     mat->N=N;
     int k=0;
     int k1=0;
-    struct Complex zero;
+    Complex zero;
     zero.re=0.0;
     zero.im=0.0;
-    struct Complex one;
+    Complex one;
     one.re=1.0;
     one.im=0.0;
     for(;k<N;k++) {
         for(k1=0;k1<N;k1++) {
             if(k1!=k) {
-                *(mat->pValue+(k*N+k1)*sizeof(struct Complex))=zero;
+                *(mat->pValue+(k*N+k1)*sizeof(Complex))=zero;
             }
             else {
-                *(mat->pValue+(k*N+k1)*sizeof(struct Complex))=one;
+                *(mat->pValue+(k*N+k1)*sizeof(Complex))=one;
             }
         }
     }
 }
-struct Complex getVal(struct SqMat mat, int i, int j) {
-    struct Complex toret;
+Complex getVal(struct SqMat mat, int i, int j) {
+    Complex toret;
     toret.re=0.0;
     toret.im=0.0;
     if(i>=0 && j>=0 && i<mat.N && j<mat.N) {
-        toret=*(mat.pValue+(i*mat.N+j)*sizeof(struct Complex));
+        toret=*(mat.pValue+(i*mat.N+j)*sizeof(Complex));
     }
     return toret;
 }
-void setVal(struct SqMat * mat, int i, int j, struct Complex x) {
+void setVal(struct SqMat * mat, int i, int j, Complex x) {
     if(i>=0 && j>=0 && i<mat->N && j<mat->N) {
-        *(mat->pValue+(i*mat->N+j)*sizeof(struct Complex))=x;
+        *(mat->pValue+(i*mat->N+j)*sizeof(Complex))=x;
     }
 }
-struct SqMat scaleSqMat(struct SqMat mat, struct Complex lambda) {
+struct SqMat scaleSqMat(struct SqMat mat, Complex lambda) {
     struct SqMat toret;
     initZeroSqMat(&toret, mat.N);
     int k=0;
@@ -434,7 +444,7 @@ struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2) {
         int k=0;
         int k1=0;
         int k2=0;
-        struct Complex value;
+        Complex value;
         for(;k<mat1.N;k++) {
             for(k1=0;k1<mat2.N;k1++) {
                 value.re=0.0;
@@ -447,6 +457,24 @@ struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2) {
         }
     }
     return toret;
+}
+void multSafeSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out) {
+    if(mat1.N==mat2.N && mat2.N==out->N) {
+        int k=0;
+        int k1=0;
+        int k2=0;
+        Complex value;
+        for(;k<mat1.N;k++) {
+            for(k1=0;k1<mat2.N;k1++) {
+                value.re=0.0;
+                value.im=0.0;
+                for(k2=0;k2<mat1.N;k2++) {
+                    value=addCmplx(value,multCmplx(getVal(mat1,k,k2),getVal(mat2,k2,k1)));
+                }
+                setVal(out,k,k1,value);
+            }
+        }
+    }
 }
 struct SqMat powSqMat(struct SqMat mat, int j) {
     struct SqMat toret;
@@ -474,16 +502,16 @@ struct SqMat transSqMat(struct SqMat mat) {
     return toret;
 }
 void swapRows(struct SqMat * mat, int i, int j) {
-    struct Complex * tempRow=(struct Complex*) malloc(mat->N*sizeof(struct Complex));
+    Complex * tempRow=(Complex*) malloc(mat->N*sizeof(Complex));
     int k=0;
     for(;k<mat->N;k++) {
-        *(tempRow+(k+i*mat->N)*sizeof(struct Complex))=getVal(*mat,i,k);
+        *(tempRow+(k+i*mat->N)*sizeof(Complex))=getVal(*mat,i,k);
     }
     for(k=0;k<mat->N;k++) {
         setVal(mat,i,k,getVal(*mat,j,k));
     }
     for(k=0;k<mat->N;k++) {
-        setVal(mat,i,k,*(tempRow+(k+i*mat->N)*sizeof(struct Complex)));
+        setVal(mat,i,k,*(tempRow+(k+i*mat->N)*sizeof(Complex)));
     }
 }
 struct SqMat invSqMat(struct SqMat mat) { // TODO
@@ -497,10 +525,10 @@ struct SqMat invSqMat(struct SqMat mat) { // TODO
     int i=0;
     int j=0;
     int iMax=0;
-    struct Complex compVal1;
-    struct Complex compVal2;
-    struct Complex f;
-    struct Complex zero;
+    Complex compVal1;
+    Complex compVal2;
+    Complex f;
+    Complex zero;
     zero.re=0.0;
     zero.im=0.0;
     for(;k<n;k++) {
@@ -540,7 +568,7 @@ double oneNorm(struct SqMat mat) {
     double toret=0.0;
     int k=0;
     int k1=0;
-    struct Complex testVal;
+    Complex testVal;
     for(;k<mat.N;k++) {
         for(k1=0;k1<mat.N;k1++) {
             testVal=getVal(mat,k,k1);
