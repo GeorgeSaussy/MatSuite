@@ -490,17 +490,31 @@ void multSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out) {
         }
     }
 }
-void powSqMat(struct SqMat mat, unsigned int j, struct SqMat * out) { // write as devide an concour
-    struct SqMat toret;
-    initIdSqMat(&toret,mat.N);
-    if(j>=1) {
-        struct SqMat tempmat;
-        initIdSqMat(&tempmat,mat.N);
-        int k=0;
-        for(;k<j;k++) {
-            multSqMat(toret,mat,&tempmat);
-            safeCopySqMat(tempmat,&toret);
+void powSqMat(struct SqMat mat, unsigned int j, struct SqMat * out) { // this can be made faster
+    struct SqMat ongoing;
+    initZeroSqMat(&ongoing, mat.N);
+    struct SqMat * workspace;
+    initZeroSqMat(workspace, mat.N);
+    struct SqMat * tempmat;
+    initZeroSqMat(tempmat, mat.N);
+    helper_powSqMat(mat,j,out,ongoing,workspace,tempmat);
+}
+void helper_powSqMat(struct SqMat mat, unsigned int j, struct SqMat * out, struct SqMat ongoing, struct SqMat * workspace, struct SqMat * tempmat) {
+    if(j!=0) {
+        unsigned int iter=(unsigned int) log2(1.0*j);
+        unsigned int diff=(unsigned int) j-pow(2,iter);
+        safeCopySqMat(mat,workspace);
+        while(iter>0) {
+            multSqMat(*workspace,*workspace,tempmat);
+            safeCopySqMat(*tempmat,workspace);
+            iter--;
         }
+        multSqMat(ongoing,*workspace,tempmat);
+        safeCopySqMat(*tempmat,&ongoing);
+        helper_powSqMat(mat,diff,out,ongoing,workspace,tempmat);
+    }
+    else {
+        safeCopySqMat(ongoing,out);
     }
 }
 void transSqMat(struct SqMat mat, struct SqMat * out) {

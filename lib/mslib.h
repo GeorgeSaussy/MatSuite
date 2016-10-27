@@ -263,6 +263,10 @@ void multSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out);
 */
 void powSqMat(struct SqMat mat, unsigned int j, struct SqMat * out); // TODO div & c
 /**
+    Helper function [tktk]
+*/
+void helper_powSqMat(struct SqMat mat, unsigned int j, struct SqMat * out, struct SqMat ongoing, struct SqMat * workspace, struct SqMat * tempmat);
+/**
     Function to calculate the transpose of a square matrix
     @param mat the matrix to transpose
     @param out where to store the value mat^T
