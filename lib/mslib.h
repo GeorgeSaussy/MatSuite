@@ -233,26 +233,20 @@ struct SqMat scaleSqMat(struct SqMat mat, Complex lambda);
     Add two matricies
     @param mat1 the first matrix
     @param mat2 the second matrix
-    @return the sum
-    @warning addition fails if mat1.N!=mat2.N
+    @param out where to store the sum
+    @return void
+    @warning addition fails if mat1.N!=mat2.N or mat1.N!=out->N
 */
-struct SqMat addSqMat(struct SqMat mat1, struct SqMat mat2);
-/**
-    Function to multiply two matricies
-    @param mat1 the first factor
-    @param mat2 the second factor
-    @return the product
-    @warning multiplication fails if mat1.N!=mat2.N
-    @warning do not use, fails often
-*/
-struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2);
+void addSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out);
 /**
     Function to safely perform matrix multiplication
     @param mat1 the first factor
     @param mat2 the second factor
-    @return the product
+    @param out where to store the product
+    @return void
+    @warning fails if mat1.N!=mat2.N or mat1.N!=out->N
 */
-void multSafeSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out);
+void multSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out);
 /**
     Function to calculate the power of a matrix
     @param mat the base matrix
@@ -260,14 +254,14 @@ void multSafeSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out);
     @return mat^j
     @warning must have j>=0
 */
-struct SqMat powSqMat(struct SqMat mat, int j);
+struct SqMat powSqMat(struct SqMat mat, int j); // TODO MAKE SAFE
 /**
     Function to calculate the transpose of a square matrix
     @param mat the matrix to transpose
     @return the transpose of mat
     @warning must j>=0
 */
-struct SqMat transSqMat(struct SqMat mat);
+struct SqMat transSqMat(struct SqMat mat); // TODO MAKE SAFE
 /**
     Swap rows within a matrix
     @param mat a refenrece to the matrix on which to operate
@@ -281,7 +275,7 @@ void swapRows(struct SqMat * mat, int i, int j);
     @param mat the matrix to invert
     @return the inverse of mat
 */
-struct SqMat invSqMat(struct SqMat mat);
+struct SqMat invSqMat(struct SqMat mat); // TODO MAKE SAFE
 /**
     Calculate the one norm of a matrix
     @param mat the matrix argument

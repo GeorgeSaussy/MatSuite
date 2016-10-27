@@ -1,10 +1,12 @@
 #include "mslib.h"
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 void safeCopySqMatRl(struct SqMatRl mat1, struct SqMatRl * mat2) {
     free(mat2->pValue);
     mat2->N=mat1.N;
     mat2->pValue=(double*) malloc(mat1.N*mat1.N*sizeof(double));
+    assert(mat2->pValue!=NULL);
     int k=0;
     for(;k<mat1.N*mat1.N;k++) {
         *(mat2->pValue+k*sizeof(double))=*(mat1.pValue+k*sizeof(double));
@@ -423,42 +425,18 @@ struct SqMat scaleSqMat(struct SqMat mat, Complex lambda) {
     }
     return toret;
 }
-struct SqMat addSqMat(struct SqMat mat1, struct SqMat mat2) {
-    struct SqMat toret;
-    if(mat1.N==mat2.N) {
-        initZeroSqMat(&toret, mat1.N);
+void addSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out) {
+    if(mat1.N==mat2.N && mat2.N==out->N) {
         int k=0;
         int k1=0;
         for(;k<mat1.N;k++) {
             for(k1=0;k1<mat1.N;k1++) {
-                setVal(&toret,k,k1,addCmplx(getVal(mat1,k,k1),getVal(mat2,k,k1)));
+                setVal(out,k,k1,addCmplx(getVal(mat1,k,k1),getVal(mat2,k,k1)));
             }
         }
     }
-    return toret;
 }
-struct SqMat multSqMat(struct SqMat mat1, struct SqMat mat2) {
-    struct SqMat toret;
-    initZeroSqMat(&toret, mat1.N);
-    if(mat1.N==mat2.N) {
-        int k=0;
-        int k1=0;
-        int k2=0;
-        Complex value;
-        for(;k<mat1.N;k++) {
-            for(k1=0;k1<mat2.N;k1++) {
-                value.re=0.0;
-                value.im=0.0;
-                for(k2=0;k2<mat1.N;k2++) {
-                    value=addCmplx(value,multCmplx(getVal(mat1,k,k2),getVal(mat2,k2,k1)));
-                }
-                setVal(&toret,k,k1,value);
-            }
-        }
-    }
-    return toret;
-}
-void multSafeSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out) {
+void multSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out) {
     if(mat1.N==mat2.N && mat2.N==out->N) {
         int k=0;
         int k1=0;
@@ -479,11 +457,14 @@ void multSafeSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out) {
 struct SqMat powSqMat(struct SqMat mat, int j) {
     struct SqMat toret;
     if(j>=0) {
+        struct SqMat tempmat;
         initIdSqMat(&toret,mat.N);
+        initIdSqMat(&tempmat,mat.N);
         if(j>=1) {
             int k=0;
             for(;k<j;k++) {
-                toret=multSqMat(toret,mat);
+                multSqMat(toret,mat,&tempmat);
+                safeCopySqMat(tempmat,&toret);
             }
         }
     }
