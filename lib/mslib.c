@@ -14,7 +14,8 @@ void safeCopySqMatRl(struct SqMatRl mat1, struct SqMatRl * mat2) {
 }
 void initZeroSqMatRl(struct SqMatRl * mat, int N) {
     mat->N=N;
-    mat->pValue=(double*) malloc(N*N*sizeof(double)); // TODO check malloc succeeds
+    mat->pValue=(double*) malloc(N*N*sizeof(double));
+    assert(mat->pValue!=NULL);
     int k=0;
     for(;k<N*N;k++) {
         *(mat->pValue+k*sizeof(double))=0;
@@ -22,7 +23,8 @@ void initZeroSqMatRl(struct SqMatRl * mat, int N) {
 }
 void initIdSqMatRl(struct SqMatRl * mat, int N) {
     mat->N=N;
-    mat->pValue=(double*) malloc(N*N*sizeof(double)); // TODO check malloc succeeds
+    mat->pValue=(double*) malloc(N*N*sizeof(double));
+    assert(mat->pValue!=NULL);
     int k=0;
     int k1=0;
     for(;k<N;k++) {
@@ -117,6 +119,7 @@ struct SqMatRl transSqMatRl(struct SqMatRl mat) {
 }
 void swapRowsRl(struct SqMatRl * mat, int i, int j) {
     double * tempRow=(double*) malloc(mat->N*sizeof(double));
+    assert(tempRow!=NULL);
     int k=0;
     for(;k<mat->N;k++) {
         *(tempRow+k*sizeof(double))=getValRl(*mat,i,k);
@@ -243,8 +246,11 @@ double * expvKrylovRl(struct SqMatRl mat, double t, double * v, double tau, doub
     struct SqMatRl F;
     initZeroSqMatRl(&F,mat.N+2);
     double * w=(double*) malloc(mat.N*sizeof(double));
+    assert(w!=NULL);
     double * v1=(double*) malloc(mat.N*sizeof(double));
+    assert(v1!=NULL);
     double * p=(double*) malloc(mat.N*sizeof(double));
+    assert(p!=NULL);
     for(k=0;k<mat.N;k++) {
         *(w+k*sizeof(double))=0;
         for(k1=0;k1<mat.N;k1++) {
@@ -346,17 +352,26 @@ Complex divCmplx(Complex num1, Complex num2) {
     return toret;
 }
 void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
-    free(mat2->pValue);
-    mat2->N=mat1.N;
-    mat2->pValue=(Complex*) malloc(mat2->N*mat2->N*sizeof(Complex));
     int k=0;
-    for(;k<mat2->N*mat2->N;k++) {
-        *(mat2->pValue+k*sizeof(Complex))=*(mat1.pValue+k*sizeof(Complex));
+    if(mat1.N==mat2->N) {
+        for(;k<mat2->N*mat2->N;k++) {
+            *(mat2->pValue+k*sizeof(Complex))=*(mat1.pValue+k*sizeof(Complex));
+        }
+    }
+    else {
+        free(mat2->pValue);
+        mat2->N=mat1.N;
+        mat2->pValue=(Complex*) malloc(mat2->N*mat2->N*sizeof(Complex));
+        assert(mat2->pValue!=NULL);
+        for(;k<mat2->N*mat2->N;k++) {
+            *(mat2->pValue+k*sizeof(Complex))=*(mat1.pValue+k*sizeof(Complex));
+        }
     }
 }
 void initZeroSqMat(struct SqMat * mat, int N) {
     //free(mat->pValue);
     mat->pValue=(Complex*) malloc(N*N*sizeof(Complex));
+    assert(mat->pValue!=NULL);
     mat->N=N;
     int k=0;
     Complex zero;
@@ -379,6 +394,7 @@ void zeroSqMat(struct SqMat * mat) {
 void initIdSqMat(struct SqMat * mat, int N) {
     free(mat->pValue);
     mat->pValue=(Complex*) malloc(N*N*sizeof(Complex));
+    assert(mat->pValue!=NULL);
     mat->N=N;
     int k=0;
     int k1=0;
@@ -395,6 +411,26 @@ void initIdSqMat(struct SqMat * mat, int N) {
             }
             else {
                 *(mat->pValue+(k*N+k1)*sizeof(Complex))=one;
+            }
+        }
+    }
+}
+void idSqMat(struct SqMat * out) {
+    int k=0;
+    int k1=0;
+    Complex one;
+    one.re=1.0;
+    one.im=0.0;
+    Complex zero;
+    zero.re=0.0;
+    zero.im=0.0;
+    for(;k<out->N;k++) {
+        for(k1=0;k1<out->N;k++) {
+            if(k==k1) {
+                setVal(out,k,k1,one);
+            }
+            else {
+                setVal(out,k,k1,zero);
             }
         }
     }
@@ -454,36 +490,31 @@ void multSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out) {
         }
     }
 }
-struct SqMat powSqMat(struct SqMat mat, int j) {
+void powSqMat(struct SqMat mat, unsigned int j, struct SqMat * out) { // write as devide an concour
     struct SqMat toret;
-    if(j>=0) {
+    initIdSqMat(&toret,mat.N);
+    if(j>=1) {
         struct SqMat tempmat;
-        initIdSqMat(&toret,mat.N);
         initIdSqMat(&tempmat,mat.N);
-        if(j>=1) {
-            int k=0;
-            for(;k<j;k++) {
-                multSqMat(toret,mat,&tempmat);
-                safeCopySqMat(tempmat,&toret);
-            }
+        int k=0;
+        for(;k<j;k++) {
+            multSqMat(toret,mat,&tempmat);
+            safeCopySqMat(tempmat,&toret);
         }
     }
-    return toret;
 }
-struct SqMat transSqMat(struct SqMat mat) {
-    struct SqMat toret;
-    initZeroSqMat(&toret,mat.N);
+void transSqMat(struct SqMat mat, struct SqMat * out) {
     int k=0;
     int k1=0;
     for(;k<mat.N;k++) {
         for(k1=0;k1<mat.N;k1++) {
-            setVal(&toret,k,k1,getVal(mat,k1,k));
+            setVal(out,k,k1,getVal(mat,k1,k));
         }
     }
-    return toret;
 }
 void swapRows(struct SqMat * mat, int i, int j) {
     Complex * tempRow=(Complex*) malloc(mat->N*sizeof(Complex));
+    assert(tempRow!=NULL);
     int k=0;
     for(;k<mat->N;k++) {
         *(tempRow+(k+i*mat->N)*sizeof(Complex))=getVal(*mat,i,k);
@@ -495,10 +526,9 @@ void swapRows(struct SqMat * mat, int i, int j) {
         setVal(mat,i,k,*(tempRow+(k+i*mat->N)*sizeof(Complex)));
     }
 }
-struct SqMat invSqMat(struct SqMat mat) { // TODO
-    struct SqMat toret;
+void invSqMat(struct SqMat mat, struct SqMat * out) {
     int n=mat.N;
-    initIdSqMat(&toret,n);
+    idSqMat(out);
     struct SqMat ongoing;
     safeCopySqMat(mat,&ongoing);
     int k=0;
@@ -523,12 +553,12 @@ struct SqMat invSqMat(struct SqMat mat) { // TODO
         }
         // warning: A singular if A[iMax][k] == 0
         swapRows(&ongoing,k,iMax);
-        swapRows(&toret,k,iMax);
+        swapRows(out,k,iMax);
         for(i=k+1;i<n;i++) {
             f=divCmplx(getVal(ongoing,i,k),getVal(ongoing,k,k));
             for(j=k+1;j<n;j++) {
                 setVal(&ongoing,i,j,subCmplx(getVal(ongoing,i,j),multCmplx(f,getVal(ongoing,k,j))));
-                setVal(&toret,i,j,subCmplx(getVal(toret,i,j),multCmplx(f,getVal(toret,k,j))));
+                setVal(out,i,j,subCmplx(getVal(*out,i,j),multCmplx(f,getVal(*out,k,j))));
             }
             setVal(&ongoing,i,k,zero);
         }
@@ -539,11 +569,10 @@ struct SqMat invSqMat(struct SqMat mat) { // TODO
             f=divCmplx(getVal(ongoing,i,k),getVal(ongoing,k,k));
             for(j=0;j<n;j++) {
                 setVal(&ongoing,i,j,subCmplx(getVal(ongoing,i,j),multCmplx(f,getVal(ongoing,i,j))));
-                setVal(&toret,i,j,subCmplx(getVal(toret,i,j),multCmplx(f,getVal(toret,i,j))));
+                setVal(out,i,j,subCmplx(getVal(*out,i,j),multCmplx(f,getVal(*out,i,j))));
             }
         }
     }
-    return toret;
 }
 double oneNorm(struct SqMat mat) {
     double toret=0.0;

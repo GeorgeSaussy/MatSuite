@@ -204,6 +204,12 @@ void zeroSqMat(struct SqMat * mat);
 */
 void initIdSqMat(struct SqMat * mat, int N);
 /**
+    Function to set the a SqMat as a ID matrix
+    @param out the matrix to reset
+    @return void
+*/
+void idSqMat(struct SqMat * out);
+/**
     Function to get the value from the matrix
     @param mat a reference to the matrix
     @param i the row of the value
@@ -251,17 +257,19 @@ void multSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out);
     Function to calculate the power of a matrix
     @param mat the base matrix
     @param j the power
-    @return mat^j
+    @param out hwere to store the value mat^j
+    @return void
     @warning must have j>=0
 */
-struct SqMat powSqMat(struct SqMat mat, int j); // TODO MAKE SAFE
+void powSqMat(struct SqMat mat, unsigned int j, struct SqMat * out); // TODO div & c
 /**
     Function to calculate the transpose of a square matrix
     @param mat the matrix to transpose
-    @return the transpose of mat
-    @warning must j>=0
+    @param out where to store the value mat^T
+    @return void
+    @warning fails if mat.N!=out->N
 */
-struct SqMat transSqMat(struct SqMat mat); // TODO MAKE SAFE
+void transSqMat(struct SqMat mat, struct SqMat * out);
 /**
     Swap rows within a matrix
     @param mat a refenrece to the matrix on which to operate
@@ -273,9 +281,11 @@ void swapRows(struct SqMat * mat, int i, int j);
 /**
     Calculate the inverse of a matrix using Gaussian elemination
     @param mat the matrix to invert
-    @return the inverse of mat
+    @param out where to store the value mat^-1
+    @return void
+    @warning fails if mat.N!=out->N
 */
-struct SqMat invSqMat(struct SqMat mat); // TODO MAKE SAFE
+void invSqMat(struct SqMat mat, struct SqMat * out);
 /**
     Calculate the one norm of a matrix
     @param mat the matrix argument
