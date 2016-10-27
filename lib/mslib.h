@@ -263,7 +263,14 @@ void multSqMat(struct SqMat mat1, struct SqMat mat2, struct SqMat * out);
 */
 void powSqMat(struct SqMat mat, unsigned int j, struct SqMat * out); // TODO div & c
 /**
-    Helper function [tktk]
+    Helper function for powSqMat
+    @param mat the matrix of which to take the power
+    @param j the remaining power to calculate
+    @param out where to store the result of taking the power
+    @param workspace some reserved memory to use in the computation
+    @param tempmat some reserved memory to use in the computation
+    @return void
+    @warning should not be called outside of mslib
 */
 void helper_powSqMat(struct SqMat mat, unsigned int j, struct SqMat * out, struct SqMat ongoing, struct SqMat * workspace, struct SqMat * tempmat);
 /**
