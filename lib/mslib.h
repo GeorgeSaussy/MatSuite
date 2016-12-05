@@ -309,10 +309,12 @@ struct Matrix {
     int M;
     Complex * pValue;
 }
+void safeCopyMat(struct Matrix mat1, struct Matrix mat2);
 void initZeroMat(struct Matrix * mat, int N, int M);
 Complex getValMat(struct Matrix mat, int i, int j);
 void setValMat(struct Matrix * mat, int i, int j, Complex x);
 void multMat(struct Matrix mat1, struct Matrix mat2, struct Matrix * out);
+struct Matrix getColMat(struct Matrix mat, int j);
 /**
     Calculate the the exponential of a matrix using the Krylov method
     @param t
@@ -325,6 +327,6 @@ void multMat(struct Matrix mat1, struct Matrix mat2, struct Matrix * out);
     @param hump
     @return void
 */
-void expvKrylov(double t, struct SqMatA, Complex * v, double tol, int m1, Complex * w, err, hump);
+void expvKrylov(double t, struct SqMat A, struct Matrix v, double tol, int m1, struct Matrix * w, err, hump);
 
 #endif

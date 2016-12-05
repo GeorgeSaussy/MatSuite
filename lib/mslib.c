@@ -645,7 +645,25 @@ void multMat(struct Matrix mat1, struct Matrix mat2, struct Matrix * out) {
         }
     }
 }
-void expvKrylov(double t, struct SqMat A, Complex * v, double tol, int m1, Complex * w, err, double * hump) {
+struct Matrix getColMat(struct Matrix mat, int j) {
+    struct Matrix toret;
+    initZeroMat(&toret,mat.N,j);
+    for(int k=0;k<mat.N;k++) {
+        setValMat(&toret,k,1,getVal(mat,k,j));
+    }
+    return toret;
+}
+struct Matrix transMat(struct Matrix mat) {
+    struct Matrix toret;
+    initZeroMat(&toret,mat.M,mat.N);
+    for(int i=0;i<toret.N;i++) {
+        for(int j=0;j<toret.M;j++) {
+            setValMat(&toret,i,j,getValMat(mat,j,i));
+        }
+    }
+    return toret;
+}
+void expvKrylov(double t, struct SqMat A, Matrix v, double tol, int m1, Matrix * w, err, double * hump) {
     // define some constants
     int n=A.N;
     int m=min(m1,30);
@@ -674,13 +692,29 @@ void expvKrylov(double t, struct SqMat A, Complex * v, double tol, int m1, Compl
     if(t<0) {
         sgn=-1;
     }
-    for(int iter=0;iter<n;iter++) {
-        *(w+iter*sizeof(Complex))=*(v+iter*sizeof(Complex));
-    }
+    safeCopyMat(v,w);
     *hump=normv;
     while(t_now<t_out) {
+        Matrix V;
+        Matrix H;
         nstep+=1;
         t_step=min(t_out-t,t_new);
-
+        initZeroMat(&mat,n,m+1);
+        initZeroMat(&mat,m+2,m+2);
+        for(int iter=0;iter<A.N;iter++) {
+            setValMat(&V,iter,0,*(w+iter*sizeof(Complex))/beta);
+        }
+        struct Matrix p;
+        p->pValue=(Complex*)malloc(V.N*sizeof(Complex));
+        for(int j=0;j<m;j++) {
+            multMat(A,getColMat(V,j));
+            for(int i=0;i<j;i++) {
+                struct Matrix singleton;
+                singleton->pValue=(Complex*)malloc(sizeof(Complex));
+                multMat(transMat(getCol(V,i)),p&singleton);
+                setValMat(&H,i,j,getValMat(V,))
+                // TODO HERE !!!
+            }
+        }
     }
 }
