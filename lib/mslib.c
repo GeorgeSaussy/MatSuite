@@ -351,6 +351,11 @@ Complex divCmplx(Complex num1, Complex num2) {
     toret.im=(num1.im*num2.re-num1.re*num2.im)/(num2.re*num2.re+num2.im*num2.im);
     return toret;
 }
+double normCmplx(Complex num) {
+    double toret;
+    toret=sqrt(num.re*num.re+num.im*num.im);
+    return toret;
+}
 void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
     int k=0;
     if(mat1.N==mat2->N) {
@@ -603,4 +608,79 @@ double oneNorm(struct SqMat mat) {
     }
     toret=sqrt(toret);
     return toret;
+}
+void initZeroMat(struct SqMat * mat, int N, int M) {
+    mat->N=N;
+    mat->M=M;
+    mat->pValue=(Complex*)malloc(N*M*sizeof(Complex));
+    Complex zero;
+    zero->re=0.0;
+    zero->im=0.0;
+    for(int k=0;k<M*N;k++) {
+        *(mat->pValue+k*sizeof(Complex))=zero;
+    }
+}
+Complex getValMat(struct SqMat mat, int i, int j) {
+    Complex toret;
+    toret=*(mat.pValue+i*mat.N+j*mat.M);
+    return toret;
+}
+void setValMat(struct Matrix * mat, int i, int j, Complex x) {
+    *(mat->pValue+i*mat->N+j*mat->M)=x;
+}
+void multMat(struct Matrix mat1, struct Matrix mat2, struct Matrix * out) {
+    ongoing=zero;
+    if(mat1.M==mat2.N) {
+        int k=0;
+        int k1=0;
+        int k2=0;
+        Complex value;
+        for(k=0;k<mat1.N;k++) {
+            value.re=0.0;
+            value.im=0.0;
+            for(k1=0;k1,mat2.M;k2++) {
+                value=addCmplx(value,multCmplx(getValMat(mat1,k,k2),getValMat(mst2,k2,k1));
+            }
+            setValMat(out,k,k1,value);
+        }
+    }
+}
+void expvKrylov(double t, struct SqMat A, Complex * v, double tol, int m1, Complex * w, err, double * hump) {
+    // define some constants
+    int n=A.N;
+    int m=min(m1,30);
+    double anorm=oneNorm(A);
+    double mxrej=10, btol=1.0e-7;
+    double gamma=0.9, delta=1.2;
+    double mb=(double)m;
+    double  t_out=abs(t), t_new=0, t_now=0;
+    int nstep=0;
+    double s_error=0, rndoff=anorm*eps; // FIXME hwat is eps?
+    int k1=2;
+    double xm=1.0/((double)m);
+    double normv, beta, fact;
+    double s, sgn;
+    normv=0.0;
+    for(int iter=0;iter<n;iter++) {
+        normv+=normCmplx(*(v+iter*sizeof(Complex)));
+    }
+    normv=sqrt(normv);
+    beta=normv;
+    fact=pow(((m+1)/exp(1)),(m+1))*sqrt(2*M_PI*(m+1));
+    t_new=(1/anorm)*pow(((fact*tol)/(4*beta*anorm)),xm);
+    s=pow(10.0,floor(log10(t_new))-1);
+    t_new=ceil(t_new/s)*s;
+    sgn=1;
+    if(t<0) {
+        sgn=-1;
+    }
+    for(int iter=0;iter<n;iter++) {
+        *(w+iter*sizeof(Complex))=*(v+iter*sizeof(Complex));
+    }
+    *hump=normv;
+    while(t_now<t_out) {
+        nstep+=1;
+        t_step=min(t_out-t,t_new);
+
+    }
 }

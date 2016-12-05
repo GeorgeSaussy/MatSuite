@@ -1,6 +1,7 @@
 #ifndef MSLIB_H
 #define MSLIB_H
 /** @file */
+// TODO malloc the space in the operations, assume user is responcable for cleaning up
 /**
     Struct to hold a matrix
 */
@@ -303,4 +304,27 @@ void invSqMat(struct SqMat mat, struct SqMat * out);
     @return double the one norm of mat
 */
 double oneNorm(struct SqMat mat);
+struct Matrix {
+    int N;
+    int M;
+    Complex * pValue;
+}
+void initZeroMat(struct Matrix * mat, int N, int M);
+Complex getValMat(struct Matrix mat, int i, int j);
+void setValMat(struct Matrix * mat, int i, int j, Complex x);
+void multMat(struct Matrix mat1, struct Matrix mat2, struct Matrix * out);
+/**
+    Calculate the the exponential of a matrix using the Krylov method
+    @param t
+    @param A
+    @param v
+    @param tol the tolerance (default should be 1.0e-7)
+    @param m must be greater than 0 (greatest value should be 30)
+    @param w
+    @param err
+    @param hump
+    @return void
+*/
+void expvKrylov(double t, struct SqMatA, Complex * v, double tol, int m1, Complex * w, err, hump);
+
 #endif
