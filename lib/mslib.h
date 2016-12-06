@@ -2,6 +2,8 @@
 #define MSLIB_H
 /** @file */
 // TODO malloc the space in the operations, assume user is responcable for cleaning up
+// TODO do F stuff
+// free V H
 /**
     Struct to hold a matrix
 */
@@ -309,11 +311,70 @@ struct Matrix {
     int M;
     Complex * pValue;
 }
-void safeCopyMat(struct Matrix mat1, struct Matrix mat2);
+/**
+    Initialize a matrix to be a matrix of all zeroes
+    @param mat a reference to the matrix to initialize
+    @param N the height of the matrix
+    @param M the width of the matrix
+*/
 void initZeroMat(struct Matrix * mat, int N, int M);
+/**
+    Copy one matrix to another without worring about memory leaks
+    @param mat1 the matrix to copy
+    @param mat2 a reference to where the matrix is to be copied
+    @return void
+*/
+void safeCopyMat(struct Matrix mat1, struct Matrix * mat2);
+/**
+    Function to get the value from the matrix
+    @param mat a reference to the matrix
+    @param i the row of the value
+    @param j the column of the value
+    @return the value found in the element
+    @warning returns 0.0 if indexes not in range
+*/
 Complex getValMat(struct Matrix mat, int i, int j);
+/**
+    Function to set a value in the matrix
+    @param mat a reference to a matrix
+    @param i the row of the value
+    @param j the column of the matrix
+    @param x the value to set
+    @return void
+    @warning fails if indexes not in range
+*/
 void setValMat(struct Matrix * mat, int i, int j, Complex x);
+/**
+    Calculate the value of a matrix scaled by a scalar
+    @param lambda the scalar
+    @param mat the matrix
+    @return the scaled matrix
+*/
+struct Matrix scaleMat(struct Matrix mat, Complex lambda);
+/**
+    Add two matricies
+    @param mat1 the first matrix
+    @param mat2 the second matrix
+    @param out where to store the sum
+    @return void
+    @warning addition fails if mat1.N!=mat2.N or mat1.N!=out->N
+*/
+void addMat(struct Matrix mat1, struct Matrix mat2, struct MAtrix * out);
+/**
+    Function to safely perform matrix multiplication
+    @param mat1 the first factor
+    @param mat2 the second factor
+    @param out where to store the product
+    @return void
+    @warning fails if mat1.M!=mat2.N or mat1.N!=out->N
+*/
 void multMat(struct Matrix mat1, struct Matrix mat2, struct Matrix * out);
+/**
+    Return a golumn form a given matrix
+    @param mat the matric
+    @param j the column to return
+    @return the column as a column vector as a matrix
+*/
 struct Matrix getColMat(struct Matrix mat, int j);
 /**
     Calculate the the exponential of a matrix using the Krylov method
@@ -327,6 +388,6 @@ struct Matrix getColMat(struct Matrix mat, int j);
     @param hump
     @return void
 */
-void expvKrylov(double t, struct SqMat A, struct Matrix v, double tol, int m1, struct Matrix * w, err, hump);
+void expvKrylov(double t, struct SqMat A, struct Matrix v, double tol, int m1, struct Matrix * w, double * err, double * hump);
 
 #endif
