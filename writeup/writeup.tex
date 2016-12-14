@@ -1,141 +1,149 @@
-\documentclass{article}
-
-\usepackage{amssymb,amsmath,amsthm,amsfonts,bbm,accents,mathtools,dsfont}
-\usepackage{upgreek, courier, gensymb, tabularx, enumitem, comment, geometry}
-\usepackage{graphicx, ctable, booktabs, setspace, wrapfig, tikz, calc}
-\usepackage[]{units}
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-}
-
-
-\newcommand{\lint}{\int\limits}
-\newcommand{\dint}{\displaystyle\int}
-\newcommand{\llim}{\lim\limits}
-\newcommand{\lsum}{\sum\limits}
-\newcommand{\clos}[1]{\overline{#1}}
-\newcommand{\trans}[1]{#1^\top}
-\def\mean#1{\left< #1 \right>}
-\newcommand{\error}{\ensuremath{{}^{{}_{_\sim}}}}
-\newcommand{\minus}{\ensuremath{{}^{{}_{_{{-}}}}}\!}
-
-\DeclareMathOperator{\vol}{vol}
-\DeclareMathOperator{\sinc}{sinc}
-\DeclareMathOperator{\sgn}{sgn}
-\DeclareMathOperator{\osc}{osc}
-\DeclareMathOperator{\supp}{supp}
-\DeclareMathOperator{\Ima}{Im}
-\DeclareMathOperator{\var}{var}
-\DeclareMathOperator{\trace}{tr}
-
-\DeclarePairedDelimiter\abs{\lvert}{\rvert}
-\DeclarePairedDelimiter\norm{\lVert}{\rVert}
-\makeatletter
-\let\oldabs\abs
-\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+% ****** Start of file apssamp.tex ******
 %
-\let\oldnorm\norm
-\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
-\makeatother
+%   This file is part of the APS files in the REVTeX 4.1 distribution.
+%   Version 4.1r of REVTeX, August 2010
+%
+%   Copyright (c) 2009, 2010 The American Physical Society.
+%
+%   See the REVTeX 4 README file for restrictions and more information.
+%
+% TeX'ing this file requires that you have AMS-LaTeX 2.0 installed
+% as well as the rest of the prerequisites for REVTeX 4.1
+%
+% See the REVTeX 4 README file
+% It also requires running BibTeX. The commands are as follows:
+%
+%  1)  latex apssamp.tex
+%  2)  bibtex apssamp
+%  3)  latex apssamp.tex
+%  4)  latex apssamp.tex
+%
+\documentclass[%
+ reprint,
+%superscriptaddress,
+%groupedaddress,
+%unsortedaddress,
+%runinaddress,
+%frontmatterverbose,
+%preprint,
+%showpacs,preprintnumbers,
+%nofootinbib,
+%nobibnotes,
+%bibnotes,
+ amsmath,amssymb,
+ aps,
+%pra,
+%prb,
+%rmp,
+%prstab,
+%prstper,
+%floatfix,
+]{revtex4-1}
 
-\makeatletter
-\renewcommand*\env@matrix[1][\arraystretch]{%
-	\edef\arraystretch{#1}%
-	\hskip -\arraycolsep
-	\let\@ifnextchar\new@ifnextchar
-	\array{*\c@MaxMatrixCols c}}
-\makeatother
+\usepackage{graphicx}% Include figure files
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{bm}% bold math
+%\usepackage{hyperref}% add hypertext capabilities
+%\usepackage[mathlines]{lineno}% Enable numbering of text and display math
+%\linenumbers\relax % Commence numbering lines
 
-\newcommand*{\Value}{\frac{1}{2}x^2}%
-
-\newtheoremstyle{exampstyle}
-{} % Space above
-{\parsep} % Space below
-{} % Body font
-{} % Indent amount
-{\itshape} % Theorem head font
-{.} % Punctuation after theorem head
-{.5em} % Space after theorem head
-{} % Theorem head spec (can be left empty, meaning `normal')
-\theoremstyle{exampstyle} \newtheorem*{remark}{Remark}
-
-\renewcommand{\complement}[1]{#1^\mathsf{c}}
-\newcommand{\R}{\mathds{R}}
-\newcommand{\N}{\mathds{N}}
-\newcommand{\C}{\mathds{C}}
-\newcommand{\Z}{\mathds{Z}}
-\newcommand{\Q}{\mathds{Q}}
-\newcommand{\D}{\mathds{D}}
-\newcommand{\Hyp}{\mathds{H}}
-\newcommand{\1}{\mathds{1}}
-\newcommand{\e}{\mathds{E}}
-\newcommand{\Id}{\mathrm{Id}}
-\newcommand{\compcent}[1]{\vcenter{\hbox{$#1\circ$}}}
-\newcommand{\comp}{\mathbin{\mathchoice
-		{\compcent\scriptstyle}{\compcent\scriptstyle}
-		{\compcent\scriptscriptstyle}{\compcent\scriptscriptstyle}}}
-
-\providecommand*{\unit}[1]{\ensuremath{\mathrm{\,#1}}}
-
-\makeatletter
-\providecommand{\diff}%
-{\@ifnextchar^{\DIfF}{\DIfF^{}}}
-\def\DIfF^#1{ \mathop{\mathrm{\mathstrut d}} \nolimits^{#1}\gobblespace }
-\def\gobblespace{\futurelet\diffarg\opspace}
-\def\opspace{%
-	\let\DiffSpace\!
-	\ifx\diffarg( \let\DiffSpace\relax \else
-	\ifx\diffarg\[ \let\DiffSpace\relax \else
-	\ifx\diffarg\] \let\DiffSpace\relax \else
-	\ifx\diffarg\{ \let\DiffSpace\relax \fi\fi\fi\DiffSpace}
-\providecommand{\deriv}[3][]{ \frac{\diff^{#1}#2}{\diff #3^{#1}}}
-\providecommand{\pderiv}[3][]{ \frac{\partial^{#1}#2}{\partial #3^{#1}}}
-
-\newcommand{\dderiv}{\displaystyle\deriv}
-\newcommand{\dpderiv}{\displaystyle\pderiv}
+%\usepackage[showframe,%Uncomment any one of the following lines to test
+%%scale=0.7, marginratio={1:1, 2:3}, ignoreall,% default settings
+%%text={7in,10in},centering,
+%%margin=1.5in,
+%%total={6.5in,8.75in}, top=1.2in, left=0.9in, includefoot,
+%%height=10in,a5paper,hmargin={3cm,0.8in},
+%]{geometry}
 
 \begin{document}
 
-\title{MatSuite Writeup}
-\author{George Saussy}
+%\preprint{APS/123-QED}
+
+\title{MatSuite: A Package for GPU Accelerated Sparse Matrix Exponentiation}% Force line breaks with \\
+%\thanks{A footnote to the article title}%
+
+\author{George T. Saussy}
+%\altaffiliation[Also at ]{Physics Department, XYZ University.}%Lines break automatically or can be forced with \\
+%\author{Second Author}%
+ \email{george.saussy@yale.edu}
+\affiliation{%
+ Yale University
+}%
+
+%\collaboration{MUSO Collaboration}%\noaffiliation
+
+\author{Victor Batista}
+ \homepage{http://ursula.chem.yale.edu/~batista/}
+\affiliation{
+ Yale University
+}%
+%\author{Delta Author}
+%\affiliation{%
+% Authors' institution and/or address\\
+% This line break forced with \textbackslash\textbackslash
+%}%
+
+%\collaboration{CLEO Collaboration}%\noaffiliation
+
+\date{\today}% It is always \today, today,
+             %  but any date may be explicitly specified
+
+\begin{abstract}
+
+
+Over the past two decades, graphics processing units (GPUs) have increasingly been used for parallel computing in scientific settings. In particular, GPUs can be used to speed up the calculation of the Hamiltonian evolution of a mixed-state vector. Here, we present a GPU-optimized partial implementation of Krylov wave propagation for quantum states. In the process, we implement a small suite of functions designed to handle matrices. This system is designed to be used to train an neural network that will speed up the calculation of the propagation of quantum states. The neural network can then be used to aid in the design of molecules which would be computationally infeasible otherwise. However, the systems can also be reused for any program requiring repeated calculation of wave propagation. This implementation can be used on any machine with a Nvidia graphics unit installed.
+
+% 8 sent
+
+\end{abstract}
+
+\pacs{Valid PACS appear here}% PACS, the Physics and Astronomy
+                             % Classification Scheme.
+%\keywords{Suggested keywords}%Use showkeys class option if keyword
+                              %display desired
 \maketitle
 
-In this project we attempt to build a GPU optimized implementation of Krylov wave propagation for quantum states. In the process we, implement a small suite of functions designed to handle matrices. This system will be used to train an neural network that will speed up the calculation of the propagation of quantum states. The neural network can then be used to aid in the design of molecules which would be computationally infeasible otherwise. % 4
+%\tableofcontents
 
-% 5 6 7 8 9 10
+\section{Introduction}
+Physicists must frequently calculate the propagation of a quantum state. This calculation is often extremely computationally expensive, even for simple systems. This problem is only exasperated when many bodies are introduced or the Hamiltonian is not well behaved. %3
 
-\section{Motivation}
-Physicist must frequently calculate the propagation of a quantum state. This calculation is often extremely computationally expensive, even for simple systems. This problem is only exasperated when many bodies are introduced or the Hamiltonian is not well behaved. %3 
+However, as physical methods play a greater role in chemistry, more efficient means of calculating wave propagation in many body systems must be explored. The aim of this research should be to bring down the cost of understanding the numeric behaviour of particles and molecules in generic settings, so that the methods found can be generally applied without needing to be customized for a given problem. %2
 
-However, as physical methods play a greater role in chemistry, more efficient means of calculating wave propagation in many body systems must be explored. The aim of this research should be to bring down the cost of understanding the the behaviour of particles and molecules in generic settings, so that the methods found can be generally applied without needing to be customized for a given problem. %2
-
-In the interest of generality the most generic form of a quantum system is given by the Schrodinger equation, $i\hbar d_t|\phi\rangle = H|\phi\rangle$, where $|\phi\rangle$ is the quantum state and $H$ is the Hamiltonian under which the system is evolving. The generic solution to this equation is then 
-\[ |\phi (t)\rangle = \exp(-iHt/\hbar ) |\phi_0\rangle \]
-However, this computation is practice is very expensive because of the exponential. In particular the generic definition of $\exp (A)$ for matrix $A$ is given by 
+In the interest of generality the most generic form of a quantum system is given by the Schrodinger equation, $i\hbar d_t|\phi\rangle = H|\phi\rangle$, where $|\phi\rangle$ is the quantum state and $H$ is the Hamiltonian under which the system is evolving. The generic solution to this equation is then $|\phi (t)\rangle = \exp(-iHt/\hbar ) |\phi_0\rangle $. However, this computation is practice is very expensive because of the exponential. In particular the generic definition of $\exp (A)$ for matrix $A$ is given by
 \[ \exp (A) = \sum_{k=0}^\infty A^k/k! \]
-which does not converge quickly for $\norm{A}>>1$. % 5
-(In fact, the error term given only a constant number of terms are used in the above equation will grow exponentially with $\norm{A}$.)
+which does not converge quickly for $||A||>>1$. % 5
+(In fact, the error term given only a constant number of terms are used in the above equation will grow exponentially with $||A||$.)
 Bringing the computation time for matrix exponentiation down would allow theorists to consider systems with a greater set of pure quantum states, and potentially to numerically consider the behaviour of systems that were previously infeasible to treat. % 2
 
-In this project, I present the design and implementation of a suite of GPU optimized software to speed up these computations. % 1
+In this paper, I present the design and partial implementation of a package of GPU optimized software to speed up these computations. % 1
 
 % 14 15
+
+\section{Historical Context and Motivation}
+
+Over the past two decades, personal computer architecture has been tuned for video games. In order to render more complex images on a screen, a specialized unit called a grphic processing unit, or GPU, was added to the design of most new personal computers. While a single CPU can only process one instruction at a time, a GPU is a massively parallel, allowing it to carry out many floating point operations at the same time. This allows GPUs to process a large amount of data at the same time. Programs written for GPUs, known as shaders, consist of a list of vectorized operations that will apply to every data loaded to the chip. However, shader languages, such as CUDA and OpenCL, do not have all of the features one may expect (such as function calls). % 6
+
+GPUs were only began to be considered seriously as scientific tools in 2005 after it was found that LU matrix factorization could be sped up my moving part of the computation to a GPU. Since then, GPU-based research efforts have included signal processing, machine learning, and attempts to rewrite BLAS and LAPACK. Not every attempt at using the parallel nature of GPUs have been successful though, as CPU architecture is still more mature. % 3
+
+However more recently, research in GPU accelerated molecular modeling has become more common. In 2007, Stone et. al. published a paper explicitly detailing the advantages of using GPUs in physical chemistry. They looked at the possibility of accelerating the calculation of Coulomb forces on atoms in a many body system and under certain conditions, they found GPU acceleration gave as high as 10x speed up. % 3
+
+At the same time, researchers in chemical physics have begun to ask if one can numerically figure molecular structures that have certain properties. These projects require that a researcher be able to calculate the Hamiltonian evolution of a wave vector for a dense subset of molecular designs that may fulfill the desired properties. However, the naive method for Hamiltonian evolution, namely computing a matrix exponential with viz a Taylor series is untenable as a practical solution. Fortunately, other algorithms can be used (e.g. the Pade approximation), but the body of research in this area is ongoing. % 4
+
+The implementation presented in this paper is based on ExpoKit by Roger Sidje written in Fortran and Matlab. % 1
+%  17 sent
 
 \section{Mathematical background}
 
 The literature on efficient matrix exponentiation is fairly concise. There are fewer than a dozen papers that contribute to the field and only three or four that are core to the progress of the field. We choose to focus on two algorithms, the Pade approximation and the Kylov approximation. % 3
 
-The Pade approximation for matrix exponentiation is based on the Pade approximate, where a function is calculated by taking the ratio of two power series. We know the k-th polynomial coefficient in the Taylor expansion of $\exp(x)$ at zero is $k!^{-1}$. If we posit that 
+The Pade approximation for matrix exponentiation is based on the Pade approximate, where a function is calculated by taking the ratio of two power series. We know the k-th polynomial coefficient in the Taylor expansion of $\exp(x)$ at zero is $k!^{-1}$. If we posit that
 $$ \exp(x)\approx\frac{P(x)}{Q(x)} $$
-for 
+for
 $$ P(x)=\sum_{k=0}^p a_kx^k, Q(x)=\sum_{k=0}^q b_kx^k $$
 then we can calculate the coefficients of the above approximation by equating terms in the approximation to terms in the Taylor expansion. For a given value of $p$ and $q$ the coefficients can be precomputed and stored in a lookup table for faster computation. In addition, algorithms exist to bound the error from this approximation, namely the one found in Ward 1977 ('Numerical Computation of the Matrix Exponential with Accuracy Estimate' SIAM J. NUMBER. ANAL. Vol 14, No. 4). This is essential to making sure the use of this approximation possible, because without an knowledge of the error the approximation is worthless. % 6
 
-The second approximation used is the Krylov approximation. The state-of-the-art implementation is \href{http://www.maths.uq.edu.au/expokit/}{Explokit} by Roger Sidje. While this repository is stable, it is implemented in Fortran and Matlab. A C/SPIR-V implementation should outperform this suite. The Krylov approximation used in this project is an iterative method, which is optimized for sparse matrix exponentiation. In the generic case we use the Arnoldi iteration. (Later,   
+The second approximation used is the Krylov approximation. The state-of-the-art implementation is \href{http://www.maths.uq.edu.au/expokit/}{Explokit} by Roger Sidje. While this repository is stable, it is implemented in Fortran and Matlab. A C/SPIR-V implementation should outperform this suite. The Krylov approximation used in this project is an iterative method, which is optimized for sparse matrix exponentiation. In the generic case we use the Arnoldi iteration. (Later,
 Lanczos iteration should be implemented for the case the matrix can be guaranteed to be a valid Hamiltonian.)
 
 For sparse matrix $A$ and vector $v,$ Arnoldi iteration calculates $\exp(A)v$ by finding an ortho-normal basis for the set of vectors $\{v,Av,A^2v,...,A^mv\}$ for some typically small $m<Dim(v)$. This can be done efficiently by the Gram-Schmidt procedure. The algorithm then projects $A$ onto this so-called Krylov basis. Where the eigenvalues can be computed efficiently. Once the eigenvalues of a matrix are known, calculating its exponential is extremely simple ($O(\sqrt{Dim(A)}$ in fact). Thus by taking advantage of the fact that the matrix is sparse allows the algorithm to terminate more quickly.
@@ -148,17 +156,17 @@ For sparse matrix $A$ and vector $v,$ Arnoldi iteration calculates $\exp(A)v$ by
 
 This project has two overall goals: 1) to create code that will perform wave propagation as efficiently as possible, and 2) to make this implementation as portable and easy to use as possible to use as possible. To that end, there will be four functions implemented, each representing different approximation methods.
 
-The primary computational structure used in the program is a \texttt{struct SqMat}. This struct is a square matrix of real numbers, and the current implementation of the the library only supports real matrices. 
+The primary computational structure used in the program is a \texttt{struct SqMat}. This struct is a square matrix of real numbers, and the current implementation of the the library only supports real matrices.
 \newline
 
 \texttt{double* expv(struct SqMat mat, double t, double * v, double tau, double minerr);}
 
-A function to perform the the Krylov estimation for $\exp(t*mat)v$ where \texttt{tau} is the time step used and \texttt{minerr} is the minimum error allowed (must be greater than machine error on double operations). This algorithm is optimized for the case \texttt{mat} is large and sparse. (It is the user's responsibility ensure that $Dim(v)=\sqrt{Dim(mat)}$.)  
+A function to perform the the Krylov estimation for $\exp(t*mat)v$ where \texttt{tau} is the time step used and \texttt{minerr} is the minimum error allowed (must be greater than machine error on double operations). This algorithm is optimized for the case \texttt{mat} is large and sparse. (It is the user's responsibility ensure that $Dim(v)=\sqrt{Dim(mat)}$.)
 \newline
 
 \texttt{struct SqMat expPade(struct SqMat mat, int p, int q);}
 
-An implementation of an older algorithm to implement the p,q-Pade approximation for $\exp(mat)$. By default, $p=q=14$ should be used.  
+An implementation of an older algorithm to implement the p,q-Pade approximation for $\exp(mat)$. By default, $p=q=14$ should be used.
 \newline
 
 \texttt{struct SqMat expSOFT(struct SqMat mat);}
@@ -168,7 +176,7 @@ An implementation of the SOFT method of matrix exponentiation. This is not yet f
 
 \texttt{struct SqMat expTaylor(struct SqMat mat, int k);}
 
-An implementation of the Taylor approximation of 
+An implementation of the Taylor approximation of
 $$\exp(mat)\approx\sum_{n=0}^k(mat)^n/n!$$
 This should not be used in practice but is included for completion.
 \newline
@@ -194,28 +202,27 @@ A function to take the j-th power of matrix $mat$.
 A small set of example programs demonstrating how the functions should be implemented in the near future.
 
 % 9 10 11 12 13 14 15
-\section{TODO}
 
-The project now forks into two sub-project: 1) begin the GPU optimization process and 2) implement more features.
 
-While GPU optimization is simple enough to understand, the practical steps are more finely detailed. As of now, we are tentatively considering using SPIR-V from the Vulkan API. The advantaged of this implementation over something like CUDA or OpenCL is that SPIR-V does not require the programmer to configure the the code for any possible computer architecture. SPIR-V allows the programmer to focus on higher level program design. One draw back on SPIR-V, especially in comparison to CUDA, is that the Vulkan API has not been generally accepted, so one older systems, the library may not run. (Vulkan is an API slotted to replace OpenGL, and SPIR-V is its GPU coding paradigm.)
+\section{Obstacles}
 
-The other direction, implementing more features, is more strait forward. First the structs \texttt{struct Complex} and \texttt{struct SqMatCplx} for complex numbers and complex matrices respectively. These will be used in a new implementation of the above functions. These new functions are absolutely necessary, as nearly all Hamiltonians are complex. (The decision to focus on real matrices first was to get a functioning implementation ready as soon as possible, even with limited functionality.) Of course once the functions are implemented, they will need to be GPU optimized as well, but this should be more strait forward using the real versions of the functions as a draft.
+There are several obstacles to optimizing an implementation to run on GPUs, some of which are specific to this project and not all of which have been completely overcome. The main problem with any GPU optimization is that GPU hardware architecture design is an ongoing field, and their driver implementation and behaviour are not standard. This creates a problem for programmers who wish to optimize a program for more than one architecture. Portability of these systems is notoriously hard to achieve. % 4
 
-Finally, after both of these steps are completed, wrappers should be implemented so that these functions can be called in Python, Matlab, and Julia. In addition, additional scripts should be written to implement machine learning APIs. However the exact design of this final API is not set in stone.
+In that vein, there are two main competing shader languages: CUDA and OpenCL. CUDA's driver implementation is proprietary and only works for Nvidia graphics processors, while OpenCL can run on any major distributor's graphics chips. The problem with OpenCL is really just a language standard, but it is up to the chip distributors to correctly implement the standard. In addition, the OpenCL standard is not as well developed as Nvidia's CUDA. % 4
 
-Ongoing performance tests against the state-of-the-art are being performed.
+Fortunately, Nvidia recognized the need for standardization, especially among researchers who, with only one or a few programmers, need to be able to write portable and extensible implementations. As such, Nvidia build cuBLAS, a GPU optimized implementation of the BLAS (Basic Linear Algebra Subprograms) library for matrix optimizations. The BLAS library (and similarly with cuBLAS) achieve cross platform performance by breaking the implementation into layers. Each layer has to be tuned for the architecture on which it is compiled, but each subsequent layer can assume the layers below are optimized and and use those functions accordingly. This is why cuBLAS is used in the implementation of the systems.
+
+% 14 15
+
+\section{Future Work}
+
+In the next few weeks, I intend to write Python and Julia wrappers for this functionality. I will also push support for Kyrlov matrix exponentiation to the NumPy source repository, although the NumPy implementation will not be able to take advantage of the GPU computing power.
+
+A second extension will be to the relevant BLAS libraries with OpenCL instead of CUDA. This would allow users without access to Nvidia's proprietary systems to still be able to run programs using the package.
+
+Finally , I intend to read "The Science of Programming Matrix Computations" by R. A. van de Geijen and E. S. Quintana-Orte and incorporate any optimizations mentioned.
 
 \section{Conclusion}
 
 
-\begin{comment}
-\section{Results}
-
-$$ FORTHCOMING $$
-
-\section{Discussion}
-
-$$ FORTHCOMING $$
-\end{comment}
 \end{document}
