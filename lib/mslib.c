@@ -1,5 +1,6 @@
 #include "mslib.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include <assert.h>
 void safeCopySqMatRl(struct SqMatRl mat1, struct SqMatRl * mat2) {
@@ -356,9 +357,9 @@ double normCmplx(Complex num) {
     toret=sqrt(num.re*num.re+num.im*num.im);
     return toret;
 }
-void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
+int safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
     if(mat2->pValue!=NULL) {
-        free(mat2.pValue);
+        free(mat2->pValue);
     }
     mat2->N=mat1.N;
     mat2->pValue=(Complex*)malloc(mat1.N*mat1.N*sizeof(Complex));
@@ -369,6 +370,7 @@ void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
     for(int k=0;k<mat1.N*mat1.N;k++) {
         *(mat2->pValue+k*sizeof(Complex))=*(mat1.pValue+k*sizeof(Complex));
     }
+    return 1;
 }
 void initZeroSqMat(struct SqMat * mat, int N) {
     //free(mat->pValue);
@@ -606,22 +608,22 @@ double oneNorm(struct SqMat mat) {
     toret=sqrt(toret);
     return toret;
 }
-void initZeroMat(struct SqMat * mat, int N, int M) {
+void initZeroMat(struct Matrix * mat, int N, int M) {
     mat->N=N;
     mat->M=M;
     Complex zero;
     if(mat->pValue==NULL) {
         mat->pValue=(Complex*)malloc(N*M*sizeof(Complex));
     }
-    zero->re=0.0;
-    zero->im=0.0;
+    zero.re=0.0;
+    zero.im=0.0;
     for(int k=0;k<M*N;k++) {
         *(mat->pValue+k*sizeof(Complex))=zero;
     }
 }
-void safeCopyMat(struct Matrix mat1, struct Matrix * mat2) {
-    if(mat->pValue!=NULL) {
-        free(mat->pValue);
+int safeCopyMat(struct Matrix mat1, struct Matrix * mat2) {
+    if(mat2->pValue!=NULL) {
+        free(mat2->pValue);
     }
     mat2->N=mat1.N;
     mat2->M=mat1.M;
@@ -633,8 +635,9 @@ void safeCopyMat(struct Matrix mat1, struct Matrix * mat2) {
     for(int k=0;k<mat1.N*mat1.M;k++) {
         *(mat2->pValue+k*sizeof(Complex))=*(mat1.pValue+k*sizeof(Complex));
     }
+    return 1;
 }
-Complex getValMat(struct SqMat mat, int i, int j) {
+Complex getValMat(struct Matrix mat, int i, int j) {
     Complex toret;
     toret=*(mat.pValue+i*mat.N+j*mat.M);
     return toret;
@@ -653,19 +656,17 @@ struct Matrix scaleMat(struct Matrix mat, Complex lambda) {
     return toret;
 }
 void addMat(struct Matrix mat1, struct Matrix mat2, struct Matrix * out) {
-    Complex ongoing=zero;
     if(mat1.M==mat2.N && mat1.M==mat2.M) {
         Complex value;
         for(int k=0;k<mat1.N;k++) {
             for(int k1=0;k1<mat1.M;k1++) {
-                value=addCmplx(getValMat());
+                value=addCmplx(getValMat(mat1,k,k1),getValMat(mat2,k,k1));
                 setValMat(out,k,k1,value);
             }
         }
     }
 }
 void multMat(struct Matrix mat1, struct Matrix mat2, struct Matrix * out) {
-    Complex ongoing=zero;
     if(mat1.M==mat2.N) {
         int k=0;
         int k1=0;
@@ -676,7 +677,7 @@ void multMat(struct Matrix mat1, struct Matrix mat2, struct Matrix * out) {
                 value.re=0.0;
                 value.im=0.0;
                 for(int k2=0;k2<mat2.M;k2++) {
-                    value=addCmplx(value,multCmplx(getValMat(mat1,k,k2),getValMat(mst2,k2,k1));
+                    value=addCmplx(value,multCmplx(getValMat(mat1,k,k2),getValMat(mat2,k2,k1)));
                 }
                 setValMat(out,k,k1,value);
             }
@@ -687,7 +688,7 @@ struct Matrix getColMat(struct Matrix mat, int j) {
     struct Matrix toret;
     initZeroMat(&toret,mat.N,j);
     for(int k=0;k<mat.N;k++) {
-        setValMat(&toret,k,1,getVal(mat,k,j));
+        setValMat(&toret,k,1,getValMat(mat,k,j));
     }
     return toret;
 }
@@ -701,17 +702,17 @@ struct Matrix transMat(struct Matrix mat) {
     }
     return toret;
 }
-void expvKrylov(double t, struct SqMat A, Matrix v, double tol, int m1, Matrix * w, double * err, double * hump) {
+int expvKrylov(double t, struct SqMat A, struct Matrix v, double tol, int m1, struct Matrix * w, double * err, double * hump) {
     // define some constants
     int n=A.N;
-    int m=min(m1,30);
+    int m;
     double anorm=oneNorm(A);
     double mxrej=10, btol=1.0e-7;
     double gamma=0.9, delta=1.2;
     double mb=(double)m;
     double  t_out=abs(t), t_new=0, t_now=0;
     int nstep=0;
-    double s_error=0, rndoff=anorm*eps; // FIXME what is eps?
+    double s_error=0, eps=0.0, rndoff=anorm*eps; // FIXME what is eps?
     int k1=2;
     double xm=1.0/((double)m);
     double normv, beta, fact;
@@ -720,6 +721,12 @@ void expvKrylov(double t, struct SqMat A, Matrix v, double tol, int m1, Matrix *
     struct Matrix V;
     struct Matrix H;
     struct Matrix p, q;
+    if(m1<30) {
+        m=m1;
+    }
+    else {
+        m=30;
+    }
     if(hump==NULL) {
         hump=(double*)malloc(sizeof(double));
         if(hump==NULL) {
@@ -752,21 +759,23 @@ void expvKrylov(double t, struct SqMat A, Matrix v, double tol, int m1, Matrix *
     while(t_now<t_out) {
         struct Matrix F;
         nstep+=1;
-        t_step=min(t_out-t,t_new);
+        double t_step=t_out-t;
+        if(t_new<t_step)
+            t_step=t_new;
         initZeroMat(&V,n,m+1);
         initZeroMat(&H,m+2,m+2);
         for(int iter=0;iter<A.N;iter++) {
-            setValMat(&V,iter,0,*(w+iter*sizeof(Complex))/beta);
+            setValMat(&V,iter,0,getValMat(*w,iter,0)/beta);
         }
-        initZeroMat(&p,N,1);
+        initZeroMat(&p,n,1);
         for(int j=0;j<m;j++) {
-            multMat(A,getColMat(V,j));
+            multMat(A,getColMat(V,j)); // FIXME wrong type
             for(int i=0;i<j;i++) {
                 Complex singleton;
                 Complex lambda;
                 Complex elm;
-                singleton->pValue=(Complex*)malloc(sizeof(Complex));
-                multMat(transMat(getCol(V,i)),p,&singleton);
+                singleton.pValue=(Complex*)malloc(sizeof(Complex));
+                multMat(transMat(getColMat(V,i)),p,&singleton);
                 singleton.re=0.0;
                 singleton.im=0.0;
                 for(int iter=0;iter<n;iter++) {
@@ -823,9 +832,9 @@ void expvKrylov(double t, struct SqMat A, Matrix v, double tol, int m1, Matrix *
                 Complex elm;
                 elm.re=beta;
                 elm.im=0.0;
-                phi1=normCmplx(multCmplx(getValMat(F,m+1,1),elm));
+                double phi1=normCmplx(multCmplx(getValMat(F,m+1,1),elm));
                 elm.re=beta*avnorm;
-                phi2=normCmplx(multCmplx(getValMat(F,m+1,1),elm));
+                double phi2=normCmplx(multCmplx(getValMat(F,m+1,1),elm));
                 if(phi1>10*phi2) {
                     err_loc=phi2;
                     xm=1/((double)m);
@@ -845,17 +854,20 @@ void expvKrylov(double t, struct SqMat A, Matrix v, double tol, int m1, Matrix *
                 s=pow(10.0,floor(log10(t_step))-1);
                 t_step=ceil(t_step/s)*s;
                 if(ireject==mxrej) {
-                    fprintf(stderr,"\nexpvKrylov: requested tolerance too high error\n")
+                    fprintf(stderr,"\nexpvKrylov: requested tolerance too high error\n");
                     return -1;
                 }
                 ireject=ireject+1;
             }
         }
-        mx=mb+max(0,k1-1);
+        mx=mb;
+        if(k1-1>0) {
+            mx+=k1-1;
+        }
         /* we do not use the multMat here to keep from using more memory */
-        /* FIXME should consider overallocaing so we do not have to realloc */
+        /* XXX should consider overallocaing so we do not have to realloc */
         if(w==NULL) {
-            w=(struct Matrix*)malloc(sizeof(strict Matrix));
+            w=(struct Matrix*)malloc(sizeof(struct Matrix));
             if(w==NULL) {
                 fprintf(stderr,"\nexpvKrylov: malloc error (w)");
                 return -1;
@@ -865,16 +877,16 @@ void expvKrylov(double t, struct SqMat A, Matrix v, double tol, int m1, Matrix *
             free(w->pValue);
         }
         w->pValue=(Complex*)malloc(mx*sizeof(Complex));
-        w.N=mx;
-        w.M=1;
+        w->N=mx;
+        w->M=1;
         if(w->pValue==NULL) {
-            fprintf(stderr,"\nexpvKrylov: malloc error (w->pValue)\n")
+            fprintf(stderr,"\nexpvKrylov: malloc error (w->pValue)\n");
             return -1;
         }
         for(int iter=0;iter<n;iter++) {
             Complex beta1;
             beta1.re=beta;
-            beta.im=0.0;
+            beta1.im=0.0;
             elm.re=0.0;
             elm.im=0.0;
             for(int iter1=0;iter1<mx;iter1++) {
@@ -885,16 +897,18 @@ void expvKrylov(double t, struct SqMat A, Matrix v, double tol, int m1, Matrix *
             setValMat(w,iter,1,elm);
         }
         beta=0;
-        for(int iter=0;iter<w.N;iter++) {
+        for(int iter=0;iter<w->N;iter++) {
             beta+=normCmplx(getValMat(*w,iter,0))*normCmplx(getValMat(*w,iter,0));
         }
         beta=sqrt(beta);
-        *hump=max(*hump,beta);
+        if(beta>*hump)
+            *hump=beta;
         t_now=t_now+t_step;
         t_new=gamma*t_step*pow((t_step*tol/err_loc),xm);
         s=pow(10,floor(log10(t_new))-1);
         t_new=ceil(t_new/s)*s;
-        err_loc=max(err_loc,rndoff);
+        if(rndoff>err_loc)
+            err_loc=rndoff;
         s_error=s_error+err_loc;
     }
     *err=s_error;
@@ -903,4 +917,5 @@ void expvKrylov(double t, struct SqMat A, Matrix v, double tol, int m1, Matrix *
     free(H.pValue);
     free(p.pValue);
     free(q.pValue);
+    return 1;
 }

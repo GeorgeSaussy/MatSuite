@@ -185,9 +185,9 @@ struct SqMat {
     Copy one matrix to another without worring about memory leaks
     @param mat1 the matrix to copy
     @param mat2 a reference to where the matrix is to be copied
-    @return void
+    @return 1 on sucess, else -1;
 */
-void safeCopySqMat(struct SqMat mat1, struct SqMat * mat2);
+int safeCopySqMat(struct SqMat mat1, struct SqMat * mat2);
 /**
     Initialize a square matrix to be a matrix of all zeroes
     @param mat a reference to the matrix to initialize
@@ -310,7 +310,7 @@ struct Matrix {
     int N;
     int M;
     Complex * pValue;
-}
+};
 /**
     Initialize a matrix to be a matrix of all zeroes
     @param mat a reference to the matrix to initialize
@@ -322,9 +322,9 @@ void initZeroMat(struct Matrix * mat, int N, int M);
     Copy one matrix to another without worring about memory leaks
     @param mat1 the matrix to copy
     @param mat2 a reference to where the matrix is to be copied
-    @return void
+    @return 1 if succedes, else -1
 */
-void safeCopyMat(struct Matrix mat1, struct Matrix * mat2);
+int safeCopyMat(struct Matrix mat1, struct Matrix * mat2);
 /**
     Function to get the value from the matrix
     @param mat a reference to the matrix
@@ -359,7 +359,7 @@ struct Matrix scaleMat(struct Matrix mat, Complex lambda);
     @return void
     @warning addition fails if mat1.N!=mat2.N or mat1.N!=out->N
 */
-void addMat(struct Matrix mat1, struct Matrix mat2, struct MAtrix * out);
+void addMat(struct Matrix mat1, struct Matrix mat2, struct Matrix * out);
 /**
     Function to safely perform matrix multiplication
     @param mat1 the first factor
@@ -386,8 +386,8 @@ struct Matrix getColMat(struct Matrix mat, int j);
     @param w
     @param err
     @param hump
-    @return void
+    @return 1 on sucess, else -1
 */
-void expvKrylov(double t, struct SqMat A, struct Matrix v, double tol, int m1, struct Matrix * w, double * err, double * hump);
+int expvKrylov(double t, struct SqMat A, struct Matrix v, double tol, int m1, struct Matrix * w, double * err, double * hump);
 
 #endif
