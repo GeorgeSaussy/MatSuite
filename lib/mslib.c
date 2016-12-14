@@ -10,7 +10,7 @@ void safeCopySqMatRl(struct SqMatRl mat1, struct SqMatRl * mat2) {
     assert(mat2->pValue!=NULL);
     int k=0;
     for(;k<mat1.N*mat1.N;k++) {
-        *(mat2->pValue+k*sizeof(double))=*(mat1.pValue+k*sizeof(double));
+        *(mat2->pValue+k*sizeof(double))=*(mat1.pValue+k);
     }
 }
 void initZeroSqMatRl(struct SqMatRl * mat, int N) {
@@ -19,7 +19,7 @@ void initZeroSqMatRl(struct SqMatRl * mat, int N) {
     assert(mat->pValue!=NULL);
     int k=0;
     for(;k<N*N;k++) {
-        *(mat->pValue+k*sizeof(double))=0;
+        *(mat->pValue+k)=0;
     }
 }
 void initIdSqMatRl(struct SqMatRl * mat, int N) {
@@ -31,10 +31,10 @@ void initIdSqMatRl(struct SqMatRl * mat, int N) {
     for(;k<N;k++) {
         for(k1=0;k1<N;k1++) {
             if(k1==k) {
-                *(mat->pValue+(k*N+k1)*sizeof(double))=1;
+                *(mat->pValue+(k*N+k1))=1;
             }
             else {
-                *(mat->pValue+(k*N+k1)*sizeof(double))=0;
+                *(mat->pValue+(k*N+k1))=0;
             }
         }
     }
@@ -42,13 +42,13 @@ void initIdSqMatRl(struct SqMatRl * mat, int N) {
 double getValRl(struct SqMatRl mat, int i, int j) {
     double toret=0.0;
     if(0<=i && i<mat.N && 0<=j && j<mat.N) {
-        toret=*(mat.pValue+(i*mat.N+j)*sizeof(double));
+        toret=*(mat.pValue+(i*mat.N+j));
     }
     return toret;
 }
 void setValRl(struct SqMatRl * mat, int i, int j, double x) {
     if(0<=i && i<mat->N && 0<=j && j<mat->N) {
-        *(mat->pValue+(i*mat->N+j)*sizeof(double))=x;
+        *(mat->pValue+(i*mat->N+j))=x;
     }
 }
 struct SqMatRl scaleSqMatRl(struct SqMatRl mat, double lambda) {
@@ -123,13 +123,13 @@ void swapRowsRl(struct SqMatRl * mat, int i, int j) {
     assert(tempRow!=NULL);
     int k=0;
     for(;k<mat->N;k++) {
-        *(tempRow+k*sizeof(double))=getValRl(*mat,i,k);
+        *(tempRow+k)=getValRl(*mat,i,k);
     }
     for(k=0;k<mat->N;k++) {
         setValRl(mat,i,k,getValRl(*mat,j,k));
     }
     for(k=0;k<mat->N;k++) {
-        setValRl(mat,j,k,*(tempRow+k*sizeof(double)));
+        setValRl(mat,j,k,*(tempRow+k));
     }
 }
 struct SqMatRl invSqMatRl(struct SqMatRl mat) {
@@ -255,52 +255,52 @@ double * expvKrylovRl(struct SqMatRl mat, double t, double * v, double tau, doub
     for(k=0;k<mat.N;k++) {
         *(w+k*sizeof(double))=0;
         for(k1=0;k1<mat.N;k1++) {
-            *(w+k*sizeof(double))+=getValRl(mat,k,k1)*(*(v+k1*sizeof(double)));
+            *(w+k)+=getValRl(mat,k,k1)*(*(v+k1));
         }
     }
     for(k=0;k<mat.N;k++) {
-        matvnorm+=(*(w+k*sizeof(double)))*(*(w+k*sizeof(double)));
+        matvnorm+=(*(w+k))*(*(w+k));
     }
     matvnorm=sqrt(matvnorm);
     for(k=0;k<mat.N;k++) {
-        *(w+k*sizeof(double))=*(v+k*sizeof(double));
+        *(w+k)=*(v+k);
     }
     while(tk<t) {
         for(k=0;k<mat.N;k++) {
-            *(v+k*sizeof(double))=*(w+k*sizeof(double));
-            beta+=(*(v+k*sizeof(double)))*(*(v+k*sizeof(double)));
+            *(v+k)=*(w+k);
+            beta+=(*(v+k))*(*(v+k));
         }
         beta=sqrt(beta);
         for(k=0;k<mat.N;k++) {
-            *(v1+k*sizeof(double))=*(v+k*sizeof(double))/beta;
+            *(v1+k)=*(v+k)/beta;
         }
         for(j=0;j<mat.N;j++) { // Arnoldi process
             for(k=0;k<mat.N;k++) {
-                *(p+k*sizeof(double))=0;
+                *(p+k)=0;
                 for(k1=0;k1<mat.N;k1++) {
-                    *(p+k*sizeof(double))+=getValRl(mat,k,k1)*(*(v1+k*sizeof(double)));
+                    *(p+k)+=getValRl(mat,k,k1)*(*(v1+k));
                 }
             }
             for(i=0;i<mat.N;i++) {
                 tempvar=0;
                 for(k=0;k<mat.N;k++) {
-                    tempvar+=(*(v1+k*sizeof(double)))*(*(p+k*sizeof(double)));
+                    tempvar+=(*(v1+k))*(*(p+k));
                 }
                 setValRl(&H,i,j,tempvar);
                 for(k=0;k<mat.N;k++) {
-                    *(p+k*sizeof(double))=*(p+k*sizeof(double))-getValRl(H,i,j)*(*(v1+k*sizeof(double)));
+                    *(p+k)=*(p+k)-getValRl(H,i,j)*(*(v1+k));
                 }
             }
             tempvar=0;
             for(k=0;k<mat.N;k++) {
-                tempvar+=(*(p+k*sizeof(double)))*(*(p+k*sizeof(double)));
+                tempvar+=(*(p+k))*(*(p+k));
             }
             setValRl(&H,mat.N,mat.N-1,tempvar);
             //if(getValRl(H,mat.N,mat.N)<=tol_abs(mat)) { // TODO WHAT IS THIS ???
             //    happy_breakdown(); // TODO WHAT IS THIS ???
             //}
             for(k=0;k<mat.N;k++) {
-                *(v1+k*sizeof(double))=*(p+k*sizeof(double))/getValRl(H,mat.N,mat.N-1);
+                *(v1+k)=*(p+k)/getValRl(H,mat.N,mat.N-1);
             }
         }
         setValRl(&H,mat.N+1,mat.N,1.0);
@@ -309,7 +309,7 @@ double * expvKrylovRl(struct SqMatRl mat, double t, double * v, double tau, doub
         while(errloc>delta_tol) {
             F=expPadeRl(scaleSqMatRl(H,tau),14,14); // TODO pick exp
             for(k=0;k<mat.N;k++) {
-                *(w+k*sizeof(double))=beta*(*(v1+k*sizeof(double)))*getValRl(F,k,1);
+                *(w+k)=beta*(*(v1+k))*getValRl(F,k,1);
             }
             // LOCAL TRUNCATION ERROR ESTIMATE
             err1=beta*abs(getValRl(H,mat.N,mat.N-1)*getValRl(F,1,0));
@@ -368,7 +368,7 @@ int safeCopySqMat(struct SqMat mat1, struct SqMat * mat2) {
         return -1;
     }
     for(int k=0;k<mat1.N*mat1.N;k++) {
-        *(mat2->pValue+k*sizeof(Complex))=*(mat1.pValue+k*sizeof(Complex));
+        *(mat2->pValue+k)=*(mat1.pValue+k);
     }
     return 1;
 }
@@ -382,7 +382,7 @@ void initZeroSqMat(struct SqMat * mat, int N) {
     zero.re=0.0;
     zero.im=0.0;
     for(k=0;k<N*N;k++) {
-        *(mat->pValue+k*sizeof(Complex))=zero;
+        *(mat->pValue+k)=zero;
     }
 }
 void zeroSqMat(struct SqMat * mat) {
@@ -392,7 +392,7 @@ void zeroSqMat(struct SqMat * mat) {
     zero.re=0.0;
     zero.im=0.0;
     for(k=0;k<N*N;k++) {
-        *(mat->pValue+k*sizeof(Complex))=zero;
+        *(mat->pValue+k)=zero;
     }
 }
 void initIdSqMat(struct SqMat * mat, int N) {
@@ -411,10 +411,10 @@ void initIdSqMat(struct SqMat * mat, int N) {
     for(;k<N;k++) {
         for(k1=0;k1<N;k1++) {
             if(k1!=k) {
-                *(mat->pValue+(k*N+k1)*sizeof(Complex))=zero;
+                *(mat->pValue+(k*N+k1))=zero;
             }
             else {
-                *(mat->pValue+(k*N+k1)*sizeof(Complex))=one;
+                *(mat->pValue+(k*N+k1))=one;
             }
         }
     }
@@ -444,13 +444,13 @@ Complex getVal(struct SqMat mat, int i, int j) {
     toret.re=0.0;
     toret.im=0.0;
     if(i>=0 && j>=0 && i<mat.N && j<mat.N) {
-        toret=*(mat.pValue+(i*mat.N+j)*sizeof(Complex));
+        toret=*(mat.pValue+(i*mat.N+j));
     }
     return toret;
 }
 void setVal(struct SqMat * mat, int i, int j, Complex x) {
     if(i>=0 && j>=0 && i<mat->N && j<mat->N) {
-        *(mat->pValue+(i*mat->N+j)*sizeof(Complex))=x;
+        *(mat->pValue+(i*mat->N+j))=x;
     }
 }
 struct SqMat scaleSqMat(struct SqMat mat, Complex lambda) {
@@ -535,13 +535,13 @@ void swapRows(struct SqMat * mat, int i, int j) {
     assert(tempRow!=NULL);
     int k=0;
     for(;k<mat->N;k++) {
-        *(tempRow+(k+i*mat->N)*sizeof(Complex))=getVal(*mat,i,k);
+        *(tempRow+(k+i*mat->N))=getVal(*mat,i,k);
     }
     for(k=0;k<mat->N;k++) {
         setVal(mat,i,k,getVal(*mat,j,k));
     }
     for(k=0;k<mat->N;k++) {
-        setVal(mat,i,k,*(tempRow+(k+i*mat->N)*sizeof(Complex)));
+        setVal(mat,i,k,*(tempRow+(k+i*mat->N)));
     }
 }
 void invSqMat(struct SqMat mat, struct SqMat * out) {
@@ -618,7 +618,7 @@ void initZeroMat(struct Matrix * mat, int N, int M) {
     zero.re=0.0;
     zero.im=0.0;
     for(int k=0;k<M*N;k++) {
-        *(mat->pValue+k*sizeof(Complex))=zero;
+        *(mat->pValue+k)=zero;
     }
 }
 int safeCopyMat(struct Matrix mat1, struct Matrix * mat2) {
@@ -633,7 +633,7 @@ int safeCopyMat(struct Matrix mat1, struct Matrix * mat2) {
         return -1;
     }
     for(int k=0;k<mat1.N*mat1.M;k++) {
-        *(mat2->pValue+k*sizeof(Complex))=*(mat1.pValue+k*sizeof(Complex));
+        *(mat2->pValue+k)=*(mat1.pValue+k);
     }
     return 1;
 }
