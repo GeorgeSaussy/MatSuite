@@ -388,6 +388,6 @@ struct Matrix getColMat(struct Matrix mat, int j);
     @param hump
     @return 1 on sucess, else -1
 */
-int expvKrylov(double t, struct SqMat A, struct Matrix v, double tol, int m1, struct Matrix * w, double * err, double * hump);
+//int expvKrylov(double t, struct SqMat A, struct Matrix v, double tol, int m1, struct Matrix * w, double * err, double * hump);
 
 #endif
