@@ -86,7 +86,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = matsuite$(EXEEXT)
+bin_PROGRAMS = matsuite$(EXEEXT) test$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -101,6 +101,9 @@ PROGRAMS = $(bin_PROGRAMS)
 am_matsuite_OBJECTS = mslib.$(OBJEXT)
 matsuite_OBJECTS = $(am_matsuite_OBJECTS)
 matsuite_LDADD = $(LDADD)
+am_test_OBJECTS = mslib.$(OBJEXT) speedtests.$(OBJEXT)
+test_OBJECTS = $(am_test_OBJECTS)
+test_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -129,8 +132,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(matsuite_SOURCES)
-DIST_SOURCES = $(matsuite_SOURCES)
+SOURCES = $(matsuite_SOURCES) $(test_SOURCES)
+DIST_SOURCES = $(matsuite_SOURCES) $(test_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -247,6 +250,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_LDFLAGS = 
 matsuite_SOURCES = mslib.c mslib.h
+test_SOURCES = mslib.c mslib.h speedtests.c
 all: all-am
 
 .SUFFIXES:
@@ -327,6 +331,10 @@ matsuite$(EXEEXT): $(matsuite_OBJECTS) $(matsuite_DEPENDENCIES) $(EXTRA_matsuite
 	@rm -f matsuite$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(matsuite_OBJECTS) $(matsuite_LDADD) $(LIBS)
 
+test$(EXEEXT): $(test_OBJECTS) $(test_DEPENDENCIES) $(EXTRA_test_DEPENDENCIES) 
+	@rm -f test$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_OBJECTS) $(test_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -334,6 +342,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mslib.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speedtests.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
