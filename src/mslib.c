@@ -1,21 +1,22 @@
 #include "mslib.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 
 void ms_HamXVec(Hamiltonian H, Cmplx * v, Cmplx * w) {
-    Cell * iter=H.ptr;
-
-    while((unsigned int)(iter-H.ptr)<H.len) {
-        // Upper right part
-        (w[iter->row]).re+=(iter->val).re*(v[iter->col]).re-(iter->val).im*(v[iter->col]).im;
-        (w[iter->row]).im+=(iter->val).re*(v[iter->col]).im+(iter->val).re*(v[iter->col]).im;
-
-        // Conjugate
-        if(iter->row!=iter->col) {
-            (w[iter->col]).re+=(iter->val).re*(v[iter->row]).re+(iter->val).im*(v[iter->row]).im;
-            (w[iter->col]).im+=(iter->val).re*(v[iter->row]).im-(iter->val).im*(v[iter->row]).re;
+    int done=0;
+    int iter=0;
+    int iter1=0;
+    for(iter=0;iter<H.N;iter++) {
+        for(iter1=0;iter1<H.num_rows_per_col;iter1++) {
+            //printf("%d\t%d\n",iter,iter1);
+            w[(H.ptr)[H.num_rows_per_col*iter+iter1].row].re +=
+                        (H.ptr)[H.num_rows_per_col*iter+iter1].val.re * v[iter].re
+                        - (H.ptr)[H.num_rows_per_col*iter+iter1].val.im * v[iter].im;
+            w[(H.ptr)[H.num_rows_per_col*iter+iter1].row].im +=
+                        (H.ptr)[H.num_rows_per_col*iter+iter1].val.re * v[iter].im
+                        + (H.ptr)[H.num_rows_per_col*iter+iter1].val.im * v[iter].re;
         }
-        iter++;
     }
 }
 
@@ -30,7 +31,7 @@ void ms_GenKrylovBasis(Hamiltonian H, Cmplx * v, Cmplx ** w, unsigned int m) {
     }
 }
 
-
+/*
 void ms_parallel_HamXVec(Hamiltonian H, Cmplx ** v, Cmplx ** w, int num) {
     Cell * iter=H.ptr;
     int count=0;
@@ -49,6 +50,7 @@ void ms_parallel_HamXVec(Hamiltonian H, Cmplx ** v, Cmplx ** w, int num) {
         iter++;
     }
 }
+*/
 
 /*
 void ms_parallel_GenKrylovBasis(Hamiltonian H, Cmplx ** v, Cmplx *** w, unsigned int m, int num) {
