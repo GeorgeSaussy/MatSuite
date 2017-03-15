@@ -6,15 +6,9 @@ void ms_HamXVec(Hamiltonian H, Cmplx * v, Cmplx * w) {
     Cell * iter=H.ptr;
 
     while((unsigned int)(iter-H.ptr)<H.len) {
-        // Upper right part
         (w[iter->row]).re+=(iter->val).re*(v[iter->col]).re-(iter->val).im*(v[iter->col]).im;
         (w[iter->row]).im+=(iter->val).re*(v[iter->col]).im+(iter->val).re*(v[iter->col]).im;
 
-        // Conjugate
-        //if(iter->row!=iter->col) {
-        //    (w[iter->col]).re+=(iter->val).re*(v[iter->row]).re+(iter->val).im*(v[iter->row]).im;
-        //    (w[iter->col]).im+=(iter->val).re*(v[iter->row]).im-(iter->val).im*(v[iter->row]).re;
-        //}
         iter++;
     }
 }
@@ -136,6 +130,3 @@ void ms_parallel_GenKrylovBasis(Hamiltonian H, Cmplx ** v, Cmplx *** w, unsigned
     }
 }
 */
-int main(int argc, char** argv) {
-    return 0;
-}
