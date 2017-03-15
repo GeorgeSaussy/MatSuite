@@ -8,13 +8,12 @@ typedef struct Cmplx {
 
 typedef struct Cell {
     unsigned int row;
-    unsigned int col;
     Cmplx val;
 } Cell;
 
 typedef struct Hamiltonian {
     unsigned int N;
-    unsigned int len;
+    unsigned int num_rows_per_col;
     Cell * ptr;
 } Hamiltonian;
 
