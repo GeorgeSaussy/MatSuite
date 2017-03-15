@@ -40,6 +40,13 @@ void ms_HamXVec(Hamiltonian H, Cmplx * v, Cmplx * w);
 void ms_GenKrylovBasis(Hamiltonian H, Cmplx * v, Cmplx ** w, unsigned int m);
 
 /**
+    Generate a random Hamiltonian
+    @param sp the max number of nonzero elements per row
+    @param dim the dimention of the matrix
+    @return a pointer to a random Hamiltonian
+*/
+Hamiltonian * ms_generateRandomHamiltonian(int sp, int dim);
+/**
     Multiply multiple vectors by a Hamiltonian and store the result at a given
     location
     @param H the Hamiltonian (in the spaceial format)

@@ -1,0 +1,6 @@
+TODO
+
+Write random invertable sparse matrix generator in C [done] and matlab
+prove random method works
+test matlab and expokit baseline
+get impl 1 and 2 baseline
