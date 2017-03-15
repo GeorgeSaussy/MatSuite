@@ -1,8 +1,10 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <time.h>
-#include <assert.h>
+#include "stdlib.h"
+#include "stdio.h"
+#include "math.h"
+#include "time.h"
+#include "assert.h"
+
+// STRUCTS TO AID IN COMPUTATION
 
 typedef struct Cmplx {
     double re;
@@ -20,17 +22,40 @@ typedef struct Hamiltonian {
     Cell * ptr;
 } Hamiltonian;
 
+// CORE OF IMPLEMENTATION 2
+
+/**
+    Multiply a vector by a Hamiltonian and store the result at a given location
+    @param H the Hamiltonian (in the spaceial format)
+    @param v the vector, product
+    @param w where to store the result, should be maqlloc'd and zeroed
+    @return void
+*/
 void ms_HamXVec(Hamiltonian H, Cmplx * v, Cmplx * w) {
     Cell * iter=H.ptr;
+    int len = H.N*H.num_rows_per_col;
+    int col = 0;
 
-    while((unsigned int)(iter-H.ptr)<H.len) {
-        (w[iter->row]).re+=(iter->val).re*(v[iter->col]).re-(iter->val).im*(v[iter->col]).im;
-        (w[iter->row]).im+=(iter->val).re*(v[iter->col]).im+(iter->val).re*(v[iter->col]).im;
+    while((unsigned int)(iter-H.ptr)<len) {
+        (w[iter->row]).re+=(iter->val).re*(v[col]).re-(iter->val).im*(v[col]).im;
+        (w[iter->row]).im+=(iter->val).re*(v[col]).im+(iter->val).re*(v[col]).im;
 
+        if((unsigned int)(iter-H.ptr)%H.num_rows_per_col==H.num_rows_per_col-1) {
+            col++;
+        }
         iter++;
     }
 }
 
+/**
+    Generate the Krylov basis for a Hamiltonian and vector and store the result
+    in a a given location
+    @param H the Hamiltonian
+    @param v the vector
+    @param w where to store the result, should be malloc'd and zeroed
+    @param m the number of Kylov basis to calculate, must be > 1, should be > 10
+    @return void
+*/
 void ms_GenKrylovBasis(Hamiltonian H, Cmplx * v, Cmplx ** w, unsigned int m) {
     unsigned int count=1;
 
@@ -40,6 +65,8 @@ void ms_GenKrylovBasis(Hamiltonian H, Cmplx * v, Cmplx ** w, unsigned int m) {
         count++;
     }
 }
+
+// IMPLEMENTATION 2 TESTS
 
 /**
     Functin to test implementation with correct sparcity and an invertable
@@ -110,6 +137,8 @@ void ms_test3_GenKrylovBasis(int lowdim, int hidim, int skip, int iter) {
         free(H.ptr);
     }
 }
+
+// MAIN
 
 int main(int argc, char** argv) {
     ms_test3_GenKrylovBasis(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), atoi(argv[4])); // 10 100000 1 10 1000
