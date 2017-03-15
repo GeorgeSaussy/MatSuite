@@ -4,7 +4,22 @@
 #include <math.h>
 #include <time.h>
 #include <assert.h>
+typedef struct Cmplx {
+    double re;
+    double im;
+} Cmplx;
 
+typedef struct Cell {
+    unsigned int row;
+    unsigned int col;
+    Cmplx val;
+} Cell;
+
+typedef struct Hamiltonian {
+    unsigned int N;
+    unsigned int len;
+    Cell * ptr;
+} Hamiltonian;
 
 /**
     Functin to test implementation with correct sparcity and an invertable
