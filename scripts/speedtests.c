@@ -230,13 +230,24 @@ void ms_expm(Cmplx ** H, Cmplx ** F, Cmplx ** S, Cmplx * p, int dim, int iter) {
 
 /**
     Implement Krylov exponentiation
+
     @param t time
     @param A a pointer to a Hamiltonian
     @param normA the infinity norm of A (should be precomputed to save time)
     @param v the vector, norm must be == 1
     @paran w where to store the answer ( Dim(ans) == Dim(v) == A->N )
+
+    @param V a workspace (to avoid repeated heap allocations)
+    @param H a workspace
+    @param F a workspace
+    @param S a workspace
+    @param p a workspace
+    @param workspace a workspace
+
+    @return void
 */
-void ms_expv(double t, Hamiltonian * A, double normA, Cmplx * v, int m, Cmplx * w) { // TODO should pass this V, H, F, p
+void ms_expv(double t, Hamiltonian * A, double normA, Cmplx * v, int m, Cmplx * w,
+    Cmplx ** V, Cmplx ** H, Cmplx ** F, Cmplx ** S, Cmplx * p, Cmplx * workspace) {
     // constants
     double btol=0.0000001;
     double tol=btol;
@@ -254,33 +265,10 @@ void ms_expv(double t, Hamiltonian * A, double normA, Cmplx * v, int m, Cmplx * 
     double anorm=normA, rndoff=anorm*eps, s_error=0.0;
     double err_loc; // local error
 
-    // the expensive mallocs
-    Cmplx ** V;
-    V=(Cmplx**)malloc(dim*sizeof(Cmplx*));
-    for(int k=0;k<dim;k++) {
-        V[k]=(Cmplx*)malloc((m+1)*sizeof(Cmplx));
-    }
-    Cmplx ** H;
-    H=(Cmplx**)malloc((m+2)*sizeof(Cmplx*));
-    for(int k=0;k<dim;k++) {
-        H[k]=(Cmplx*)malloc((m+2)*sizeof(Cmplx*));
-    }
-    Cmplx ** F;
-    F=(Cmplx**)malloc(dim*sizeof(Cmplx*));
-    for(int k=0;k<dim;k++) {
-        F[k]=(Cmplx*)malloc(sizeof(Cmplx));
-    }
-    Cmplx ** S;
-    S=(Cmplx**)malloc(dim*sizeof(Cmplx*));
-    for(int k=0;k<dim;k++) {
-        S[k]=(Cmplx*)malloc(sizeof(Cmplx));
-    }
-    Cmplx * p=(Cmplx*)malloc(dim*sizeof(Cmplx)); // workspace
+
     for(int k=0;k<dim;k++) {
         w[k]=v[k];
     }
-    Cmplx * workspace=(Cmplx*)malloc(dim*sizeof(Cmplx));
-
     hump=normv;
     while(t_now<t_out) {
         nstep=nstep+1;
@@ -528,6 +516,6 @@ void ms_test4_GenKrylovBasis(int lowdim, int hidim, int skip, int iter, int spar
 
 int main(int argc, char** argv) {
     //ms_test3_GenKrylovBasis(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), atoi(argv[4])); // 1000 10000 50 1000
-    ms_test4_GenKrylovBasis(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), atoi(argv[4]), atoi(argv[5])); //  1000 10000 50 1000 4
+    //ms_test4_GenKrylovBasis(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), atoi(argv[4]), atoi(argv[5])); //  1000 10000 50 1000 4
     return 0;
 }
