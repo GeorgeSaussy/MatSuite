@@ -1,5 +1,6 @@
 #ifndef MSLIB_H
 #define MSLIB_H
+/** @file */
 
 typedef struct Cmplx {
     double re;

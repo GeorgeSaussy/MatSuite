@@ -101,8 +101,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am_matsuite_OBJECTS = mslib.$(OBJEXT)
 matsuite_OBJECTS = $(am_matsuite_OBJECTS)
 matsuite_LDADD = $(LDADD)
-am_test_OBJECTS = mslib.$(OBJEXT) speedtests.$(OBJEXT)
-test_OBJECTS = $(am_test_OBJECTS)
+test_SOURCES = test.c
+test_OBJECTS = test.$(OBJEXT)
 test_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
@@ -132,8 +132,8 @@ AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(matsuite_SOURCES) $(test_SOURCES)
-DIST_SOURCES = $(matsuite_SOURCES) $(test_SOURCES)
+SOURCES = $(matsuite_SOURCES) test.c
+DIST_SOURCES = $(matsuite_SOURCES) test.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -169,7 +169,7 @@ AUTOMAKE = ${SHELL} /home/accts/gts7/Documents/MatrixExponentiation/MatSuite/mis
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -c
+CFLAGS = -c -lm
 CPPFLAGS = 
 CXX = g++
 CXXDEPMODE = depmode=gcc3
@@ -250,7 +250,6 @@ top_builddir = ..
 top_srcdir = ..
 AM_LDFLAGS = 
 matsuite_SOURCES = mslib.c mslib.h
-test_SOURCES = mslib.c mslib.h speedtests.c
 all: all-am
 
 .SUFFIXES:
@@ -342,7 +341,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/mslib.Po
-include ./$(DEPDIR)/speedtests.Po
+include ./$(DEPDIR)/test.Po
 
 .c.o:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
