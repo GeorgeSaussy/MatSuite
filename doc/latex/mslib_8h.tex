@@ -1,0 +1,199 @@
+\hypertarget{mslib_8h}{\section{mslib.\-h File Reference}
+\label{mslib_8h}\index{mslib.\-h@{mslib.\-h}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structCmplx}{Cmplx}
+\item 
+struct \hyperlink{structCell}{Cell}
+\item 
+struct \hyperlink{structHamiltonian}{Hamiltonian}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{mslib_8h_a285d5b3963dd7babfa456c9a3a2b2685}{typedef struct \hyperlink{structCmplx}{Cmplx} {\bfseries Cmplx}}\label{mslib_8h_a285d5b3963dd7babfa456c9a3a2b2685}
+
+\item 
+\hypertarget{mslib_8h_a208ce62cb3a7fe4518d722235d9d656d}{typedef struct \hyperlink{structCell}{Cell} {\bfseries Cell}}\label{mslib_8h_a208ce62cb3a7fe4518d722235d9d656d}
+
+\item 
+\hypertarget{mslib_8h_aacca8c742d069104e46b64ea7e5317dd}{typedef struct \hyperlink{structHamiltonian}{Hamiltonian} {\bfseries Hamiltonian}}\label{mslib_8h_aacca8c742d069104e46b64ea7e5317dd}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{mslib_8h_a8f8b8fe062daa27b1032cb0ee308d442}{ms\-\_\-\-Ham\-X\-Vec} (\hyperlink{structHamiltonian}{Hamiltonian} $\ast$H, \hyperlink{structCmplx}{Cmplx} $\ast$v, \hyperlink{structCmplx}{Cmplx} $\ast$w)
+\item 
+void \hyperlink{mslib_8h_a2365314c6b18cc5c0c6365112acad822}{ms\-\_\-\-Gen\-Krylov\-Basis} (\hyperlink{structHamiltonian}{Hamiltonian} $\ast$H, \hyperlink{structCmplx}{Cmplx} $\ast$v, \hyperlink{structCmplx}{Cmplx} $\ast$$\ast$w, unsigned int m)
+\item 
+\hyperlink{structHamiltonian}{Hamiltonian} \hyperlink{mslib_8h_a45479010c15f23bbd1e79b162a9ea8b6}{ms\-\_\-generate\-Random\-Hamiltonian} (int sp, int dim)
+\item 
+double \hyperlink{mslib_8h_a39ffa282b7e7a5091363f3071607f47d}{vec\-\_\-norm} (\hyperlink{structCmplx}{Cmplx} $\ast$p, int dim)
+\item 
+void \hyperlink{mslib_8h_a06f5906e576ed4bcef544a71869b0ea7}{ms\-\_\-expm} (\hyperlink{structCmplx}{Cmplx} $\ast$$\ast$H, \hyperlink{structCmplx}{Cmplx} $\ast$$\ast$F, \hyperlink{structCmplx}{Cmplx} $\ast$$\ast$S, \hyperlink{structCmplx}{Cmplx} $\ast$p, int dim, int iter)
+\item 
+void \hyperlink{mslib_8h_a25e1657bdc91087b01df4f06779c7902}{ms\-\_\-expv} (double t, \hyperlink{structHamiltonian}{Hamiltonian} $\ast$A, double norm\-A, \hyperlink{structCmplx}{Cmplx} $\ast$v, int m, \hyperlink{structCmplx}{Cmplx} $\ast$w, \hyperlink{structCmplx}{Cmplx} $\ast$$\ast$V, \hyperlink{structCmplx}{Cmplx} $\ast$$\ast$H, \hyperlink{structCmplx}{Cmplx} $\ast$$\ast$F, \hyperlink{structCmplx}{Cmplx} $\ast$$\ast$S, \hyperlink{structCmplx}{Cmplx} $\ast$p, \hyperlink{structCmplx}{Cmplx} $\ast$workspace)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{mslib_8h_a06f5906e576ed4bcef544a71869b0ea7}{\index{mslib.\-h@{mslib.\-h}!ms\-\_\-expm@{ms\-\_\-expm}}
+\index{ms\-\_\-expm@{ms\-\_\-expm}!mslib.h@{mslib.\-h}}
+\subsubsection[{ms\-\_\-expm}]{\setlength{\rightskip}{0pt plus 5cm}void ms\-\_\-expm (
+\begin{DoxyParamCaption}
+\item[{{\bf Cmplx} $\ast$$\ast$}]{H, }
+\item[{{\bf Cmplx} $\ast$$\ast$}]{F, }
+\item[{{\bf Cmplx} $\ast$$\ast$}]{S, }
+\item[{{\bf Cmplx} $\ast$}]{p, }
+\item[{int}]{dim, }
+\item[{int}]{iter}
+\end{DoxyParamCaption}
+)}}\label{mslib_8h_a06f5906e576ed4bcef544a71869b0ea7}
+Compute a matrix exponential 
+\begin{DoxyParams}{Parameters}
+{\em H} & the matrix to exponentiate as a (Cmplx$\ast$$\ast$) \\
+\hline
+{\em F} & where to store the result \\
+\hline
+{\em S} & a workspace to store a matrix \\
+\hline
+{\em p} & a workspace to store a vector \\
+\hline
+{\em dim} & the dimention of the matrix \\
+\hline
+{\em iter} & the number of iterations of the matrix exponential to perform (must be $>$0) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{mslib_8h_a25e1657bdc91087b01df4f06779c7902}{\index{mslib.\-h@{mslib.\-h}!ms\-\_\-expv@{ms\-\_\-expv}}
+\index{ms\-\_\-expv@{ms\-\_\-expv}!mslib.h@{mslib.\-h}}
+\subsubsection[{ms\-\_\-expv}]{\setlength{\rightskip}{0pt plus 5cm}void ms\-\_\-expv (
+\begin{DoxyParamCaption}
+\item[{double}]{t, }
+\item[{{\bf Hamiltonian} $\ast$}]{A, }
+\item[{double}]{norm\-A, }
+\item[{{\bf Cmplx} $\ast$}]{v, }
+\item[{int}]{m, }
+\item[{{\bf Cmplx} $\ast$}]{w, }
+\item[{{\bf Cmplx} $\ast$$\ast$}]{V, }
+\item[{{\bf Cmplx} $\ast$$\ast$}]{H, }
+\item[{{\bf Cmplx} $\ast$$\ast$}]{F, }
+\item[{{\bf Cmplx} $\ast$$\ast$}]{S, }
+\item[{{\bf Cmplx} $\ast$}]{p, }
+\item[{{\bf Cmplx} $\ast$}]{workspace}
+\end{DoxyParamCaption}
+)}}\label{mslib_8h_a25e1657bdc91087b01df4f06779c7902}
+Implement Krylov exponentiation
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & time \\
+\hline
+{\em A} & a pointer to a \hyperlink{structHamiltonian}{Hamiltonian} \\
+\hline
+{\em norm\-A} & the infinity norm of A (should be precomputed to save time) \\
+\hline
+{\em v} & the vector, norm must be == 1  w where to store the answer ( Dim(ans) == Dim(v) == A-\/$>$N )\\
+\hline
+{\em V} & a workspace (to avoid repeated heap allocations) \\
+\hline
+{\em H} & a workspace \\
+\hline
+{\em F} & a workspace \\
+\hline
+{\em S} & a workspace \\
+\hline
+{\em p} & a workspace \\
+\hline
+{\em workspace} & a workspace\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{mslib_8h_a45479010c15f23bbd1e79b162a9ea8b6}{\index{mslib.\-h@{mslib.\-h}!ms\-\_\-generate\-Random\-Hamiltonian@{ms\-\_\-generate\-Random\-Hamiltonian}}
+\index{ms\-\_\-generate\-Random\-Hamiltonian@{ms\-\_\-generate\-Random\-Hamiltonian}!mslib.h@{mslib.\-h}}
+\subsubsection[{ms\-\_\-generate\-Random\-Hamiltonian}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Hamiltonian} ms\-\_\-generate\-Random\-Hamiltonian (
+\begin{DoxyParamCaption}
+\item[{int}]{sp, }
+\item[{int}]{dim}
+\end{DoxyParamCaption}
+)}}\label{mslib_8h_a45479010c15f23bbd1e79b162a9ea8b6}
+Generate a random \hyperlink{structHamiltonian}{Hamiltonian} 
+\begin{DoxyParams}{Parameters}
+{\em sp} & the max number of nonzero elements per row \\
+\hline
+{\em dim} & the dimention of the matrix \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to a random \hyperlink{structHamiltonian}{Hamiltonian} 
+\end{DoxyReturn}
+\hypertarget{mslib_8h_a2365314c6b18cc5c0c6365112acad822}{\index{mslib.\-h@{mslib.\-h}!ms\-\_\-\-Gen\-Krylov\-Basis@{ms\-\_\-\-Gen\-Krylov\-Basis}}
+\index{ms\-\_\-\-Gen\-Krylov\-Basis@{ms\-\_\-\-Gen\-Krylov\-Basis}!mslib.h@{mslib.\-h}}
+\subsubsection[{ms\-\_\-\-Gen\-Krylov\-Basis}]{\setlength{\rightskip}{0pt plus 5cm}void ms\-\_\-\-Gen\-Krylov\-Basis (
+\begin{DoxyParamCaption}
+\item[{{\bf Hamiltonian} $\ast$}]{H, }
+\item[{{\bf Cmplx} $\ast$}]{v, }
+\item[{{\bf Cmplx} $\ast$$\ast$}]{w, }
+\item[{unsigned int}]{m}
+\end{DoxyParamCaption}
+)}}\label{mslib_8h_a2365314c6b18cc5c0c6365112acad822}
+Generate the Krylov basis for a \hyperlink{structHamiltonian}{Hamiltonian} and vector and store the result in a a given location 
+\begin{DoxyParams}{Parameters}
+{\em H} & the \hyperlink{structHamiltonian}{Hamiltonian} \\
+\hline
+{\em v} & the vector \\
+\hline
+{\em w} & where to store the result, should be malloc'd and zeroed \\
+\hline
+{\em m} & the number of Kylov basis to calculate, must be $>$ 1, should be $>$ 10 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{mslib_8h_a8f8b8fe062daa27b1032cb0ee308d442}{\index{mslib.\-h@{mslib.\-h}!ms\-\_\-\-Ham\-X\-Vec@{ms\-\_\-\-Ham\-X\-Vec}}
+\index{ms\-\_\-\-Ham\-X\-Vec@{ms\-\_\-\-Ham\-X\-Vec}!mslib.h@{mslib.\-h}}
+\subsubsection[{ms\-\_\-\-Ham\-X\-Vec}]{\setlength{\rightskip}{0pt plus 5cm}void ms\-\_\-\-Ham\-X\-Vec (
+\begin{DoxyParamCaption}
+\item[{{\bf Hamiltonian} $\ast$}]{H, }
+\item[{{\bf Cmplx} $\ast$}]{v, }
+\item[{{\bf Cmplx} $\ast$}]{w}
+\end{DoxyParamCaption}
+)}}\label{mslib_8h_a8f8b8fe062daa27b1032cb0ee308d442}
+Multiply a vector by a \hyperlink{structHamiltonian}{Hamiltonian} and store the result at a given location 
+\begin{DoxyParams}{Parameters}
+{\em H} & the \hyperlink{structHamiltonian}{Hamiltonian} (in the spaceial format) \\
+\hline
+{\em v} & the vector, product \\
+\hline
+{\em w} & where to store the result, should be maqlloc'd and zeroed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{mslib_8h_a39ffa282b7e7a5091363f3071607f47d}{\index{mslib.\-h@{mslib.\-h}!vec\-\_\-norm@{vec\-\_\-norm}}
+\index{vec\-\_\-norm@{vec\-\_\-norm}!mslib.h@{mslib.\-h}}
+\subsubsection[{vec\-\_\-norm}]{\setlength{\rightskip}{0pt plus 5cm}double vec\-\_\-norm (
+\begin{DoxyParamCaption}
+\item[{{\bf Cmplx} $\ast$}]{p, }
+\item[{int}]{dim}
+\end{DoxyParamCaption}
+)}}\label{mslib_8h_a39ffa282b7e7a5091363f3071607f47d}
+Calculate the norm of a vector 
+\begin{DoxyParams}{Parameters}
+{\em p} & the vector \\
+\hline
+{\em dim} & the dimention of the vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the norm 
+\end{DoxyReturn}

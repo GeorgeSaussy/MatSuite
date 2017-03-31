@@ -60,6 +60,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -68,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -82,40 +83,46 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">mslib.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef MSLIB_H</span></div>
+<a href="mslib_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef MSLIB_H</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define MSLIB_H</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00004"></a><span class="lineno"><a class="line" href="structCmplx.html">    4</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structCmplx.html">Cmplx</a> {</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;    <span class="keywordtype">double</span> re;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    <span class="keywordtype">double</span> im;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;} <a class="code" href="structCmplx.html">Cmplx</a>;</div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="structCell.html">    8</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structCell.html">Cell</a> {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> row;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> col;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <a class="code" href="structCmplx.html">Cmplx</a> val;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;} <a class="code" href="structCell.html">Cell</a>;</div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="structHamiltonian.html">   13</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structHamiltonian.html">Hamiltonian</a> {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> N;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> len;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <a class="code" href="structCell.html">Cell</a> * ptr;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;} <a class="code" href="structHamiltonian.html">Hamiltonian</a>;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> ms_HamXVec(<a class="code" href="structHamiltonian.html">Hamiltonian</a> * H, <a class="code" href="structCmplx.html">Cmplx</a> * v, <a class="code" href="structCmplx.html">Cmplx</a> * w);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">void</span> ms_GenKrylovBasis(<a class="code" href="structHamiltonian.html">Hamiltonian</a> * H, <a class="code" href="structCmplx.html">Cmplx</a> * v, <a class="code" href="structCmplx.html">Cmplx</a> ** w, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<a class="code" href="structHamiltonian.html">Hamiltonian</a> ms_generateRandomHamiltonian(<span class="keywordtype">int</span> sp, <span class="keywordtype">int</span> dim);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keywordtype">double</span> vec_norm(<a class="code" href="structCmplx.html">Cmplx</a> * p, <span class="keywordtype">int</span> dim);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keywordtype">void</span> ms_expm(<a class="code" href="structCmplx.html">Cmplx</a> ** H, <a class="code" href="structCmplx.html">Cmplx</a> ** F, <a class="code" href="structCmplx.html">Cmplx</a> ** S, <a class="code" href="structCmplx.html">Cmplx</a> * p, <span class="keywordtype">int</span> dim, <span class="keywordtype">int</span> iter);</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="keywordtype">void</span> ms_expv(<span class="keywordtype">double</span> t, <a class="code" href="structHamiltonian.html">Hamiltonian</a> * A, <span class="keywordtype">double</span> normA, <a class="code" href="structCmplx.html">Cmplx</a> * v, <span class="keywordtype">int</span> m,</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="structCmplx.html">Cmplx</a> * w, <a class="code" href="structCmplx.html">Cmplx</a> ** V, <a class="code" href="structCmplx.html">Cmplx</a> ** H, <a class="code" href="structCmplx.html">Cmplx</a> ** F, <a class="code" href="structCmplx.html">Cmplx</a> ** S, <a class="code" href="structCmplx.html">Cmplx</a> * p,</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="structCmplx.html">Cmplx</a> * workspace);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="structHamiltonian_html"><div class="ttname"><a href="structHamiltonian.html">Hamiltonian</a></div><div class="ttdef"><b>Definition:</b> mslib.h:13</div></div>
-<div class="ttc" id="structCmplx_html"><div class="ttname"><a href="structCmplx.html">Cmplx</a></div><div class="ttdef"><b>Definition:</b> mslib.h:4</div></div>
-<div class="ttc" id="structCell_html"><div class="ttname"><a href="structCell.html">Cell</a></div><div class="ttdef"><b>Definition:</b> mslib.h:8</div></div>
+<div class="line"><a name="l00005"></a><span class="lineno"><a class="line" href="structCmplx.html">    5</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structCmplx.html">Cmplx</a> {</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    <span class="keywordtype">double</span> re;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keywordtype">double</span> im;</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;} <a class="code" href="structCmplx.html">Cmplx</a>;</div>
+<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="structCell.html">    9</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structCell.html">Cell</a> {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> row;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> col;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <a class="code" href="structCmplx.html">Cmplx</a> val;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;} <a class="code" href="structCell.html">Cell</a>;</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="structHamiltonian.html">   14</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structHamiltonian.html">Hamiltonian</a> {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> N;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> len;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <a class="code" href="structCell.html">Cell</a> * ptr;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;} <a class="code" href="structHamiltonian.html">Hamiltonian</a>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">void</span> <a class="code" href="mslib_8h.html#a8f8b8fe062daa27b1032cb0ee308d442">ms_HamXVec</a>(<a class="code" href="structHamiltonian.html">Hamiltonian</a> * H, <a class="code" href="structCmplx.html">Cmplx</a> * v, <a class="code" href="structCmplx.html">Cmplx</a> * w);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keywordtype">void</span> <a class="code" href="mslib_8h.html#a2365314c6b18cc5c0c6365112acad822">ms_GenKrylovBasis</a>(<a class="code" href="structHamiltonian.html">Hamiltonian</a> * H, <a class="code" href="structCmplx.html">Cmplx</a> * v, <a class="code" href="structCmplx.html">Cmplx</a> ** w, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<a class="code" href="structHamiltonian.html">Hamiltonian</a> <a class="code" href="mslib_8h.html#a45479010c15f23bbd1e79b162a9ea8b6">ms_generateRandomHamiltonian</a>(<span class="keywordtype">int</span> sp, <span class="keywordtype">int</span> dim);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keywordtype">double</span> <a class="code" href="mslib_8h.html#a39ffa282b7e7a5091363f3071607f47d">vec_norm</a>(<a class="code" href="structCmplx.html">Cmplx</a> * p, <span class="keywordtype">int</span> dim);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keywordtype">void</span> <a class="code" href="mslib_8h.html#a06f5906e576ed4bcef544a71869b0ea7">ms_expm</a>(<a class="code" href="structCmplx.html">Cmplx</a> ** H, <a class="code" href="structCmplx.html">Cmplx</a> ** F, <a class="code" href="structCmplx.html">Cmplx</a> ** S, <a class="code" href="structCmplx.html">Cmplx</a> * p, <span class="keywordtype">int</span> dim, <span class="keywordtype">int</span> iter);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="keywordtype">void</span> <a class="code" href="mslib_8h.html#a25e1657bdc91087b01df4f06779c7902">ms_expv</a>(<span class="keywordtype">double</span> t, <a class="code" href="structHamiltonian.html">Hamiltonian</a> * A, <span class="keywordtype">double</span> normA, <a class="code" href="structCmplx.html">Cmplx</a> * v, <span class="keywordtype">int</span> m,</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="structCmplx.html">Cmplx</a> * w, <a class="code" href="structCmplx.html">Cmplx</a> ** V, <a class="code" href="structCmplx.html">Cmplx</a> ** H, <a class="code" href="structCmplx.html">Cmplx</a> ** F, <a class="code" href="structCmplx.html">Cmplx</a> ** S, <a class="code" href="structCmplx.html">Cmplx</a> * p,</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <a class="code" href="structCmplx.html">Cmplx</a> * workspace);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="mslib_8h_html_a06f5906e576ed4bcef544a71869b0ea7"><div class="ttname"><a href="mslib_8h.html#a06f5906e576ed4bcef544a71869b0ea7">ms_expm</a></div><div class="ttdeci">void ms_expm(Cmplx **H, Cmplx **F, Cmplx **S, Cmplx *p, int dim, int iter)</div><div class="ttdef"><b>Definition:</b> mslib.c:117</div></div>
+<div class="ttc" id="mslib_8h_html_a45479010c15f23bbd1e79b162a9ea8b6"><div class="ttname"><a href="mslib_8h.html#a45479010c15f23bbd1e79b162a9ea8b6">ms_generateRandomHamiltonian</a></div><div class="ttdeci">Hamiltonian ms_generateRandomHamiltonian(int sp, int dim)</div><div class="ttdef"><b>Definition:</b> mslib.c:27</div></div>
+<div class="ttc" id="structHamiltonian_html"><div class="ttname"><a href="structHamiltonian.html">Hamiltonian</a></div><div class="ttdef"><b>Definition:</b> mslib.h:14</div></div>
+<div class="ttc" id="structCmplx_html"><div class="ttname"><a href="structCmplx.html">Cmplx</a></div><div class="ttdef"><b>Definition:</b> mslib.h:5</div></div>
+<div class="ttc" id="structCell_html"><div class="ttname"><a href="structCell.html">Cell</a></div><div class="ttdef"><b>Definition:</b> mslib.h:9</div></div>
+<div class="ttc" id="mslib_8h_html_a39ffa282b7e7a5091363f3071607f47d"><div class="ttname"><a href="mslib_8h.html#a39ffa282b7e7a5091363f3071607f47d">vec_norm</a></div><div class="ttdeci">double vec_norm(Cmplx *p, int dim)</div><div class="ttdef"><b>Definition:</b> mslib.c:109</div></div>
+<div class="ttc" id="mslib_8h_html_a2365314c6b18cc5c0c6365112acad822"><div class="ttname"><a href="mslib_8h.html#a2365314c6b18cc5c0c6365112acad822">ms_GenKrylovBasis</a></div><div class="ttdeci">void ms_GenKrylovBasis(Hamiltonian *H, Cmplx *v, Cmplx **w, unsigned int m)</div><div class="ttdef"><b>Definition:</b> mslib.c:18</div></div>
+<div class="ttc" id="mslib_8h_html_a8f8b8fe062daa27b1032cb0ee308d442"><div class="ttname"><a href="mslib_8h.html#a8f8b8fe062daa27b1032cb0ee308d442">ms_HamXVec</a></div><div class="ttdeci">void ms_HamXVec(Hamiltonian *H, Cmplx *v, Cmplx *w)</div><div class="ttdef"><b>Definition:</b> mslib.c:8</div></div>
+<div class="ttc" id="mslib_8h_html_a25e1657bdc91087b01df4f06779c7902"><div class="ttname"><a href="mslib_8h.html#a25e1657bdc91087b01df4f06779c7902">ms_expv</a></div><div class="ttdeci">void ms_expv(double t, Hamiltonian *A, double normA, Cmplx *v, int m, Cmplx *w, Cmplx **V, Cmplx **H, Cmplx **F, Cmplx **S, Cmplx *p, Cmplx *workspace)</div><div class="ttdef"><b>Definition:</b> mslib.c:166</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Mar 31 2017 07:47:51 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Mar 31 2017 07:51:59 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
